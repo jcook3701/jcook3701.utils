@@ -21,6 +21,12 @@ parent: jcook3701.utils
 * `infrastructure` - 
 
 
+* `{{ autobuild.git_repo.tags }}` - 
+
+
+* `debug` - 
+
+
 
 Documentation generated using: [Ansible-autodoc](https://github.com/AndresBott/ansible-autodoc)
 
