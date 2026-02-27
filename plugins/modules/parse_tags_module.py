@@ -23,6 +23,60 @@ from typing import TypedDict
 
 from ansible.module_utils.basic import AnsibleModule
 
+DOCUMENTATION = r"""
+---
+module: parse_tags_module
+short_description: Parse version tags into structured components
+description:
+    - This module takes a list of version strings (tags) and parses them into major, minor, and patch components.
+    - Supports formats like v1.2.3, project-1.2.3, or raw 1.2.3.
+version_added: "1.0.0"
+author:
+    - jcook3701
+options:
+    tags:
+        description: A list of tag strings to be parsed.
+        type: list
+        elements: str
+        required: true
+"""
+
+EXAMPLES = r"""
+- name: Parse a list of version tags
+  jcook3701.utils.parse_tags_module:
+    tags:
+      - v1.2.3
+      - emacs-29.4
+      - 2.0
+"""
+
+RETURN = r"""
+parsed_tags:
+    description: A list of dictionaries containing parsed version components.
+    returned: always
+    type: list
+    elements: dict
+    contains:
+        raw_tag:
+            description: The original tag string.
+            type: str
+        project:
+            description: The project name if extracted from the tag.
+            type: str
+        major:
+            description: The major version number.
+            type: int
+        minor:
+            description: The minor version number.
+            type: int
+        patch:
+            description: The patch version number.
+            type: int
+        error:
+            description: Error message if the format was unrecognized.
+            type: str
+"""
+
 
 class ParsedTag(TypedDict, total=False):
     raw_tag: str

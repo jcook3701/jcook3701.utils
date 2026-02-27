@@ -25,6 +25,70 @@ from typing import Any
 import yaml
 from ansible.module_utils.basic import AnsibleModule
 
+DOCUMENTATION = r"""
+---
+module: ansible_doc_gen
+short_description: Generate markdown documentation from Ansible roles and playbooks
+description:
+    - This module scans a roles directory and optional playbooks directory to generate markdown documentation files.
+    - It extracts defaults, tasks, and metadata from roles and formats them into Markdown.
+version_added: "1.0.0"
+author:
+    - jcook3701
+options:
+    roles_path:
+        description: The path to the directory containing Ansible roles.
+        type: str
+        required: true
+    playbooks_path:
+        description: The path to the directory containing Ansible playbooks.
+        type: str
+        required: false
+    output_path:
+        description: The directory where generated markdown files will be saved.
+        type: str
+        required: true
+    include_tasks:
+        description: Whether to include role tasks in the documentation.
+        type: bool
+        default: true
+    include_defaults:
+        description: Whether to include role defaults in the documentation.
+        type: bool
+        default: true
+    include_meta:
+        description: Whether to include role metadata in the documentation.
+        type: bool
+        default: true
+"""
+
+EXAMPLES = r"""
+- name: Generate documentation for local roles
+  jcook3701.utils.ansible_doc_gen:
+    roles_path: "./roles"
+    output_path: "./docs/roles"
+    include_meta: true
+
+- name: Generate docs for roles and playbooks
+  jcook3701.utils.ansible_doc_gen:
+    roles_path: "./roles"
+    playbooks_path: "./playbooks"
+    output_path: "./dist/docs"
+"""
+
+RETURN = r"""
+generated_files:
+    description: A list of paths to the markdown files that were created.
+    returned: always
+    type: list
+    sample: ["/tmp/docs/my_role.md", "/tmp/docs/site_playbook.md"]
+message:
+    description: A summary message of the operation.
+    returned: always
+    type: str
+    sample: "Docs generated at /tmp/docs"
+"""
+
 
 def yaml_to_md(data: Any) -> str:
     """Converts YAML data to a string without sorting keys."""

@@ -23,6 +23,57 @@ import urllib.parse
 import requests
 from ansible.module_utils.basic import AnsibleModule
 
+DOCUMENTATION = r"""
+---
+module: fetch_tags_module
+short_description: Fetch tags from GitHub or GitLab APIs
+description:
+    - This module connects to GitHub, GitLab, or GitLab-Freedesktop to retrieve repository tags.
+version_added: "1.0.0"
+author:
+    - jcook3701
+options:
+    provider:
+        description: The git hosting platform.
+        type: str
+        required: true
+        choices: ["github", "gitlab", "gitlab-freedesktop"]
+    owner:
+        description: The owner or group of the repository.
+        type: str
+        required: true
+    repo:
+        description: The repository name.
+        type: str
+        required: true
+    token:
+        description: Authentication token for private repos or higher rate limits.
+        type: str
+        required: false
+    latest:
+        description: If true, returns only the most recent tag instead of a list.
+        type: bool
+        default: false
+"""
+
+EXAMPLES = r"""
+- name: Get latest tag from GitHub
+  jcook3701.utils.fetch_tags_module:
+    provider: github
+    owner: ansible
+    repo: ansible
+    latest: true
+"""
+
+RETURN = r"""
+tags:
+    description: The list of tags or a single tag string if latest is true.
+    returned: success
+    type: list
+    elements: str
+    sample: ["v1.0.0", "v1.1.0"]
+"""
+
 
 # Define a TypedDict for consistent error reporting
 class APIError(dict[str, str]):
