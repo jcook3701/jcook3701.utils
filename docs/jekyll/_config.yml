@@ -6,7 +6,7 @@ version: "1.0.0"
 license: "AGPL-3.0-or-later"
 copyright: "Copyright (c) 2025-2026, Jared Cook"
 timezone: "America/Los_Angeles"
-description: "Ansible utilities for assiting automation processes."
+description: "Ansible utilities for assisting automation processes."
 remote_theme: "just-the-docs/just-the-docs@v0.11.0"
 ga_tracking: "G-C7PWLWSHB9"
 

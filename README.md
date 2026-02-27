@@ -12,7 +12,7 @@
 
 <h2 id="overview">Overview</h2>
 
-<p>Ansible utilities for assiting automation processes.</p>
+<p>Ansible utilities for assisting automation processes.</p>
 
 <hr />
 
