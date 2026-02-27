@@ -17,7 +17,7 @@
     "_repo_dir": "/home/jcook/.cookiecutters/sphinx-cookiecutter",
     "_template": "https://github.com/jcook3701/sphinx-cookiecutter.git",
     "author": "Jared Cook",
-    "description": "Ansible utilities for assiting automation processes.",
+    "description": "Ansible utilities for assisting automation processes.",
     "project_name": "utils",
     "project_slug": "jcook3701.utils",
     "version": "1.0.0"

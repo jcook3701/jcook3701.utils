@@ -1,0 +1,12 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: Get package facts from all machines
+  hosts: all
+  gather_facts: true
+  become: true
+  tasks:
+    - name: Get package facts
+      ansible.builtin.include_role:
+        name: pkg_install
+        tasks_from: package_facts

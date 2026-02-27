@@ -22,7 +22,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "jcook3701.utils"
 version = "1.0.0"
-description = "Ansible utilities for assiting automation processes."
+description = "Ansible utilities for assisting automation processes."
 authors = [
     { name="Jared Cook", email="jcook3701+github@gmail.com" }
 ]
@@ -30,7 +30,12 @@ readme = "./README.md"
 license = "AGPL-3.0-or-later"
 license-files = ["LICENSE.md"]
 requires-python = ">=3.11"
-dependencies = []
+dependencies = [
+  "ansible>=12.0",
+  "ansible-core>=2.0",
+  "PyYAML>=6.0",
+  "requests>=2.32",
+]
 keywords = [
   "ansible",
   "galaxy",
@@ -50,10 +55,9 @@ Documentation = "https://github.com/jcook3701/jcook3701.utils/docs/jekyll"
 
 [project.optional-dependencies]
 dev = [
-  "ansible>=12.0",
-  "ansible-core>=2.0",
   "ansible-runner>=2.4",
   "galaxy-importer>=0.4",
+  "ruamel.yaml>=0.17.9,<0.18.0",
 ]
 tools = [
   "antsibull-changelog>=0.34",
@@ -79,6 +83,9 @@ tools = [
   "pytest-custom-exit-code>=0.3.0",
   "ruff>=0.14.0",
   "tomllint>=0.3",
+  "types-Pillow>=10.2",
+  "types-PyYAML>=6.0",
+  "types-requests>=2.32",
   "yamllint>=1.0",
   "yamlfixer-opt-nc>=0.9",
 ]
@@ -240,6 +247,7 @@ combine-as-imports = true
 known-first-party = [
   "plugins",
 ]
+
 # ====================================
 # Formatter Configuration:
 # Ruff also formats YAML, TOML, and Markdown
