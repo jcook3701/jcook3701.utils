@@ -1,0 +1,23 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+argument_spec:
+  pkg-source-build-init-routine:  # The specific entry point
+    short_description: Initialize build variables for source packages.
+    description:
+      - "This routine sets up the 'autobuild' fact used by the build engine."
+      - "It maps generic variables to a structured object."
+    author: "Jared Cook"
+    options:
+      git_repo:
+        type: dict
+        required: true
+        description: "Dictionary containing provider, owner, and repo name."
+      build:
+        type: dict
+        required: false
+        description: "Build settings (script, checkinstall, etc.)"
+      pkgs:
+        type: dict
+        required: false
+        description: "OS-specific package dependencies (apt, dnf, etc.)"
