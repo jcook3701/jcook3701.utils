@@ -19,11 +19,21 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import re
+from typing import TypedDict
 
 from ansible.module_utils.basic import AnsibleModule
 
 
-def parse_tag(tag):
+class ParsedTag(TypedDict, total=False):
+    raw_tag: str
+    project: str | None
+    major: int
+    minor: int
+    patch: int
+    error: str  # Only present if parsing fails
+
+
+def parse_tag(tag: str) -> ParsedTag:
     """
     Parse a single tag to extract version components.
     Supports flexible tag formats such as:
@@ -40,32 +50,34 @@ def parse_tag(tag):
     for pattern in patterns:
         match = re.match(pattern, tag.strip("[]"))
         if match:
-            return {
-                "raw_tag": tag,
-                "project": (
+            return ParsedTag(
+                raw_tag=tag,
+                project=(
                     match.group("project") if "project" in match.groupdict() else None
                 ),
-                "major": int(match.group("major")),
-                "minor": int(match.group("minor")),
-                "patch": int(match.group("patch")) if match.group("patch") else 0,
-            }
+                major=int(match.group("major")),
+                minor=int(match.group("minor")),
+                patch=int(match.group("patch")) if match.group("patch") else 0,
+            )
 
-    return {"raw_tag": tag, "error": "Unrecognized format"}
+    return ParsedTag(raw_tag=tag, error="Unrecognized format")
 
 
-def parse_tags(tags):
+def parse_tags(tags: str) -> list[ParsedTag]:
     """
     Parse a list of tags and return detailed information for each tag.
     """
     return [parse_tag(tag) for tag in tags]
 
 
-def main():
-    module_args = dict(
-        tags=dict(
-            type="list", required=True, elements="str"
-        ),  # Accepts a list of tag strings
-    )
+def main() -> None:
+    module_args = {
+        "tags": {
+            "type": "list",
+            "required": True,
+            "elements": "str",
+        },  # Accepts a list of tag strings
+    }
 
     module = AnsibleModule(argument_spec=module_args, supports_check_mode=True)
 
@@ -76,7 +88,7 @@ def main():
         parsed_tags = parse_tags(tags)
         module.exit_json(changed=False, parsed_tags=parsed_tags)
     except Exception as e:
-        module.fail_json(msg=f"Error parsing tags: {str(e)}")
+        module.fail_json(msg=f"Error parsing tags: {e!s}")
 
 
 if __name__ == "__main__":

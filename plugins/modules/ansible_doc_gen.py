@@ -20,26 +20,29 @@
 
 import glob
 from pathlib import Path
+from typing import Any
 
 import yaml
 from ansible.module_utils.basic import AnsibleModule
 
 
-def yaml_to_md(data):
+def yaml_to_md(data: Any) -> str:
+    """Converts YAML data to a string without sorting keys."""
     return yaml.dump(data, sort_keys=False)
 
 
-def run_module():
-    module_args = dict(
-        roles_path=dict(type="str", required=True),
-        playbooks_path=dict(type="str", required=False, default=None),
-        output_path=dict(type="str", required=True),
-        include_tasks=dict(type="bool", default=True),
-        include_defaults=dict(type="bool", default=True),
-        include_meta=dict(type="bool", default=True),
-    )
+def run_module() -> None:
+    """Main logic for the Ansible module."""
+    module_args = {
+        "roles_path": {"type": "str", "required": True},
+        "playbooks_path": {"type": "str", "required": False, "default": None},
+        "output_path": {"type": "str", "required": True},
+        "include_tasks": {"type": "bool", "default": True},
+        "include_defaults": {"type": "bool", "default": True},
+        "include_meta": {"type": "bool", "default": True},
+    }
 
-    result = dict(changed=False, message="", generated_files=[])
+    result: dict[str, Any] = {"changed": False, "message": "", "generated_files": []}
 
     module = AnsibleModule(argument_spec=module_args, supports_check_mode=True)
 
@@ -98,7 +101,7 @@ def run_module():
     module.exit_json(**result)
 
 
-def main():
+def main() -> None:
     run_module()
 
 

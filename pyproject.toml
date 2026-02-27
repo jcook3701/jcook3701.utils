@@ -22,7 +22,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "jcook3701.utils"
 version = "1.0.0"
-description = "Ansible utilities for assiting automation processes."
+description = "Ansible utilities for assisting automation processes."
 authors = [
     { name="Jared Cook", email="jcook3701+github@gmail.com" }
 ]
@@ -30,7 +30,15 @@ readme = "./README.md"
 license = "AGPL-3.0-or-later"
 license-files = ["LICENSE.md"]
 requires-python = ">=3.11"
-dependencies = []
+dependencies = [
+  "CairoSVG>=2.8",
+  "pillow>=12.1",
+  "PyYAML>=6.0",
+  "ruamel.yaml>=0.17.9,<0.18.0",
+  "types-Pillow>=10.2",
+  "types-PyYAML>=6.0",
+  "types-requests>=2.32"
+]
 keywords = [
   "ansible",
   "galaxy",

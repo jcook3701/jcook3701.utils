@@ -23,26 +23,58 @@ import urllib.parse
 import requests
 from ansible.module_utils.basic import AnsibleModule
 
-# Dictionary for platform-specific configurations
+
+# Define a TypedDict for consistent error reporting
+class APIError(dict[str, str]):
+    error: str
+
+
+FetchResult = list[str] | str | APIError
+
+
+class PlatformConfig:
+    """Class to hold platform-specific API logic."""
+
+    def __init__(self, name: str, api_template: str, auth_type: str):
+        self.name = name
+        self.api_template = api_template
+        self.auth_type = auth_type
+
+    def get_url(self, owner: str, repo: str) -> str:
+        # For GitLab, format owner/repo as `group%2Fproject`
+        if "gitlab" in self.name:
+            project_path = urllib.parse.quote_plus(f"{owner}/{repo}")
+            return self.api_template.format(project_path=project_path)
+        return self.api_template.format(owner=owner, repo=repo)
+
+    def get_headers(self, token: str | None) -> dict[str, str]:
+        if not token:
+            return {}
+        if self.auth_type == "bearer":
+            return {"Authorization": f"token {token}"}
+        return {"Private-Token": token}
+
+
 PLATFORMS = {
-    "github": {
-        "api_url": "https://api.github.com/repos/{owner}/{repo}/tags",
-        "auth_header": lambda token: (
-            {"Authorization": f"token {token}"} if token else {}
-        ),
-    },
-    "gitlab": {
-        "api_url": "https://gitlab.com/api/v4/projects/{project_path}/repository/tags",
-        "auth_header": lambda token: {"Private-Token": token} if token else {},
-    },
-    "gitlab-freedesktop": {
-        "api_url": "https://gitlab.freedesktop.org/api/v4/projects/{project_path}/repository/tags",
-        "auth_header": lambda token: {"Private-Token": token} if token else {},
-    },
+    "github": PlatformConfig(
+        "github", "https://api.github.com/repos/{owner}/{repo}/tags", "bearer"
+    ),
+    "gitlab": PlatformConfig(
+        "gitlab",
+        "https://gitlab.com/api/v4/projects/{project_path}/repository/tags",
+        "token",
+    ),
+    "gitlab-freedesktop": PlatformConfig(
+        "gitlab-freedesktop",
+        "https://gitlab.freedesktop.org/api/v4/projects/{project_path}/repository/tags",
+        "token",
+    ),
 }
 
 
-def fetch_tags(platform, owner, repo, token, latest):
+def fetch_tags(
+    platform: str, owner: str, repo: str, token: str | None, latest: bool
+) -> FetchResult:
     """
     Fetch tags from a given platform's API.
 
@@ -56,46 +88,41 @@ def fetch_tags(platform, owner, repo, token, latest):
     Returns:
         list or dict: List of tags, a single tag if latest=True, or an error dictionary.
     """
-    if platform not in PLATFORMS:
-        return {"error": f"Unsupported platform: {platform}"}
+    config = PLATFORMS.get(platform)
 
-    config = PLATFORMS[platform]
-    headers = config["auth_header"](token)
+    if not config:
+        return APIError(error=f"Unsupported platform: {platform}")
 
-    # For GitLab, format owner/repo as `group%2Fproject`
-    if platform.startswith("gitlab"):
-        project_path = urllib.parse.quote_plus(f"{owner}/{repo}")
-        url = config["api_url"].format(project_path=project_path)
-    else:
-        url = config["api_url"].format(owner=owner, repo=repo)
+    url = config.get_url(owner, repo)
+    headers = config.get_headers(token)
 
     try:
-        response = requests.get(url, headers=headers)
+        response = requests.get(url, headers=headers, timeout=30)
         if response.status_code == 200:
             data = response.json()
             tags = [tag["name"] for tag in data]
-            return tags[0] if latest and tags else tags
+            if latest:
+                return tags[0] if latest and tags else tags
+            return tags
         else:
-            return {
-                "error": f"Unable to fetch tags (status code {response.status_code})"
-            }
+            return APIError(error=f"API Request failed ({response.status_code})")
     except Exception as e:
-        return {"error": f"Failed to fetch tags: {str(e)}"}
+        return APIError(error=f"Failed to fetch tags: {e!s}")
 
 
-def main():
+def main() -> None:
     # Define Ansible module arguments
-    module_args = dict(
-        provider=dict(
-            type="str",
-            required=True,
-            choices=["github", "gitlab", "gitlab-freedesktop"],
-        ),
-        owner=dict(type="str", required=True),
-        repo=dict(type="str", required=True),
-        token=dict(type="str", required=False, no_log=True),
-        latest=dict(type="bool", required=False, default=False),
-    )
+    module_args = {
+        "provider": {
+            "type": "str",
+            "required": True,
+            "choices": ["github", "gitlab", "gitlab-freedesktop"],
+        },
+        "owner": {"type": "str", "required": True},
+        "repo": {"type": "str", "required": True},
+        "token": {"type": "str", "required": False, "no_log": True},
+        "latest": {"type": "bool", "required": False, "default": False},
+    }
 
     # Initialize Ansible module
     module = AnsibleModule(argument_spec=module_args, supports_check_mode=True)

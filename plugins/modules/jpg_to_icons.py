@@ -25,9 +25,13 @@ import cairosvg
 from PIL import Image
 
 
+# TODO: This tool should probably be moved to a different project.
 def convert_to_icons(
-    input_file, output_sizes, output_folder="icons", export_format="png"
-):
+    input_file: str,
+    output_sizes: list[int],
+    output_folder: str = "icons",
+    export_format: str = "png",
+) -> None:
     """
     Convert an image to PNG and optionally a single SVG file.
 
@@ -43,33 +47,35 @@ def convert_to_icons(
     try:
         # Open the input image
         with Image.open(input_file) as img:
+            resample_filter = getattr(Image, "Resampling", Image).LANCZOS
+
             # Convert to RGBA if necessary
-            img = img.convert("RGBA")
+            img_rgba = img.convert("RGBA")
 
             # Generate PNG icons for each size if needed
             if export_format in ["png", "both"]:
                 for size in output_sizes:
-                    resized_img = img.resize((size, size), Image.LANCZOS)
-                    png_output_path = os.path.join(output_folder, f"icon{size}.png")
-                    resized_img.save(png_output_path, format="PNG")
-                    print(f"Saved PNG: {png_output_path}")
+                    resized_img = img_rgba.resize((size, size), resample_filter)
+                    png_path = os.path.join(output_folder, f"icon{size}.png")
+                    resized_img.save(png_path, format="PNG")
+                    print(f"Saved PNG: {png_path}")
 
             # Save a single SVG file if needed
             if export_format in ["svg", "both"]:
                 # Convert the original image to SVG after resizing to 128x128 for better clarity
                 svg_output_path = os.path.join(output_folder, "icon.svg")
-                resized_img = img.resize((128, 128), Image.LANCZOS)
-                png_temp_path = os.path.join(output_folder, "temp_icon.png")
-                resized_img.save(png_temp_path, format="PNG")
-                cairosvg.svg_from_png(png_temp_path, write_to=svg_output_path)
-                os.remove(png_temp_path)  # Clean up temporary PNG
+                resized_img = img_rgba.resize((128, 128), resample_filter)
+                png_tmp_path = os.path.join(output_folder, "temp_icon.png")
+                resized_img.save(png_tmp_path, format="PNG")
+                cairosvg.svg_from_png(png_tmp_path, write_to=svg_output_path)
+                os.remove(png_tmp_path)  # Clean up temporary PNG
                 print(f"Saved SVG: {svg_output_path}")
 
     except Exception as e:
         print(f"Error: {e}")
 
 
-if __name__ == "__main__":
+def main() -> None:
     # Set up argument parser
     parser = argparse.ArgumentParser(
         description="Convert an image to PNG, SVG, or both formats of various sizes."
@@ -101,3 +107,7 @@ if __name__ == "__main__":
 
     # Run the conversion
     convert_to_icons(args.input_file, args.sizes, args.output_folder, args.format)
+
+
+if __name__ == "__main__":
+    main()
