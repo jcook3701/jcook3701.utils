@@ -36,10 +36,7 @@ dependencies = [
   "CairoSVG>=2.8",
   "pillow>=12.1",
   "PyYAML>=6.0",
-  "requests>=2.32"
-  # "types-Pillow>=10.2",
-  # "types-PyYAML>=6.0",
-  # "types-requests>=2.32"
+  "requests>=2.32",
 ]
 keywords = [
   "ansible",
@@ -88,6 +85,9 @@ tools = [
   "pytest-custom-exit-code>=0.3.0",
   "ruff>=0.14.0",
   "tomllint>=0.3",
+  "types-Pillow>=10.2",
+  "types-PyYAML>=6.0",
+  "types-requests>=2.32",
   "yamllint>=1.0",
   "yamlfixer-opt-nc>=0.9",
 ]
