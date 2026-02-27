@@ -10,7 +10,7 @@ v1.0.0
 Release Summary
 ---------------
 
-This is the initial release of the jcook3701.utils collection. Ansible utilities for assiting automation processes.
+This is the initial release of the jcook3701.utils collection. Ansible utilities for assisting automation processes.
 
 Major Changes
 -------------

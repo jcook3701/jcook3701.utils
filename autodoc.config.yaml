@@ -21,7 +21,7 @@ name: "jcook3701.utils"
 license: "AGPL-3.0-or-later"
 author: "Jared Cook"
 email: "jcook3701+github@gmail.com"
-description: "Ansible utilities for assiting automation processes."
+description: "Ansible utilities for assisting automation processes."
 
 # Source paths for roles and playbooks (can be relative or absolute)
 roles_path: "roles"

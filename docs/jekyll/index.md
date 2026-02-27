@@ -2,7 +2,7 @@
 layout: default
 title: "utils"
 nav_order: 1
-description: "Ansible utilities for assiting automation processes."
+description: "Ansible utilities for assisting automation processes."
 ---
 {% include snippet_loader.html %}
 

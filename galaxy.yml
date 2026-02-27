@@ -25,7 +25,7 @@ license:
   - AGPL-3.0-or-later
 readme: ./README.md
 description: >
-  Ansible utilities for assiting automation processes.
+  Ansible utilities for assisting automation processes.
 
 tags:
   - lab
@@ -35,7 +35,6 @@ tags:
 
 dependencies:
   # jcook3701.pkgs: "*"
-  # jcook3701.utils: "*"
   community.general: ">=12.0.0"
 
 build_ignore:
