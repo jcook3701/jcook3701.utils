@@ -4,7 +4,9 @@
 # This is a subroutine of pkg-source-build-routine
 ---
 - name: Collect running user facts
-  ansible.builtin.include_tasks: utilities/sudo_user_facts.yml
+  ansible.builtin.include_role:
+    name: jcook3701.utils.general
+    task_from: sudo_user_facts.yml
   when: sudo_user is not defined
 
 - name: Checkinstall
@@ -21,11 +23,11 @@
 
     - name: Debug rendered template
       ansible.builtin.debug:
-        msg: "{{ lookup('template', 'utilities/checkinstall.j2') }}"
+        msg: "{{ lookup('template', 'checkinstall.j2') }}"
 
     - name: Run checkinstall
       ansible.builtin.command:
-        cmd: "{{ lookup('template', 'utilities/checkinstall.j2') }}"
+        cmd: "{{ lookup('template', 'checkinstall.j2') }}"
         chdir: "{{ autobuild.git_repo.directory }}"
       become: true
       become_user: root
@@ -35,7 +37,7 @@
 
     - name: Run checkinstall
       ansible.builtin.shell: |
-        {{ lookup('template', 'utilities/checkinstall.j2') }}
+        {{ lookup('template', 'checkinstall.j2') }}
       args:
         executable: /bin/bash
         chdir: "{{ autobuild.git_repo.directory }}/build"

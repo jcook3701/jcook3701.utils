@@ -6,7 +6,9 @@
 #   'autobuild.git_repo.parsed_tags' variable.
 ---
 - name: Collect running user facts
-  ansible.builtin.include_tasks: utilities/sudo_user_facts.yml
+  ansible.builtin.include_role:
+    name: jcook3701.utils.general
+    task_from: sudo_user_facts.yml
   when: sudo_user is not defined
 
 - name: Parse {{ autobuild.git_repo.name }} {{ autobuild.git_repo.tags }} for Version and Release

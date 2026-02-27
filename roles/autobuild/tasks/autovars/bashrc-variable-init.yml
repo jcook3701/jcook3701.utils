@@ -2,8 +2,10 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 ---
 - name: Collect running user facts
+  ansible.builtin.include_role:
+    name: jcook3701.utils.general
+    task_from: sudo_user_facts.yml
   when: sudo_user is not defined
-  ansible.builtin.include_tasks: utilities/sudo_user_facts.yml
 
 # TODO: When autobuild.build.prefix need to update autobuild.bashrc.marker to include install path
 
@@ -28,7 +30,7 @@
         bashrc:
           name: "{{ autobuild.git_repo.name }}"
           marker: "# {mark} Ansible - {{ autobuild.git_repo.name }}"
-          block: "{{ lookup('template', 'utilities/bashrc-block.j2') }}"
+          block: "{{ lookup('template', 'bashrc-block.j2') }}"
 
     - name: View .bashrc settings
       ansible.builtin.debug:

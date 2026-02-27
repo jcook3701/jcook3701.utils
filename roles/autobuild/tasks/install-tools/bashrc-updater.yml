@@ -5,7 +5,9 @@
 # Purpose is to update bashrc file for specified package.
 ---
 - name: Collect running user facts
-  ansible.builtin.include_tasks: utilities/sudo_user_facts.yml
+  ansible.builtin.include_role:
+    name: jcook3701.utils.general
+    task_from: sudo_user_facts.yml
   when: sudo_user is not defined
 
 - name: Update .bashrc for {{ autobuild.bashrc.name }}

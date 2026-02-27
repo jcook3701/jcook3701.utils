@@ -4,7 +4,9 @@
 # Head routine that is called to build packages from source code.
 ---
 - name: Collect running user facts
-  ansible.builtin.include_tasks: utilities/sudo_user_facts.yml
+  ansible.builtin.include_role:
+    name: jcook3701.utils.general
+    task_from: sudo_user_facts.yml
   when: sudo_user is not defined
 
 - name: debug
@@ -12,18 +14,20 @@
     msg: "git_repo: {{ git_repo }}"
 
 - name: Autobuild variable initialization
-  ansible.builtin.include_tasks: utilities/vars/autobuild-variable-init.yml
+  ansible.builtin.include_tasks: autovars/autobuild-variable-init.yml
 
 - name: Ensure required packages are installed
-  ansible.builtin.include_tasks: utilities/package-manager-switch.yml
+  ansible.builtin.include_role:
+    name: jcook3701.utils.general
+    task_from: package-manager-switch.yml
   when: pkgs is defined
 
 - name: Fetch Latest Github Tag if git_repo.tags left undefined
-  ansible.builtin.include_tasks: utilities/git/fetch_github_tags.yml
+  ansible.builtin.include_tasks: git/fetch_github_tags.yml
   when: autobuild.git_repo.tags is not defined or (autobuild.git_repo.tags | length == 0)
 
 - name: Parse Github tags and add parsed tags to 'autobuild.git_repo.parsed_tags'
-  ansible.builtin.include_tasks: utilities/git/parse_github_tags.yml
+  ansible.builtin.include_tasks: git/parse_github_tags.yml
   when: autobuild.git_repo.tags is defined
 
 - name: Initialization Routine for {{ autobuild.git_repo.name }} source package build
@@ -62,15 +66,15 @@
   when: autobuild.git_repo is defined
   block:
     - name: Loop {{ autobuild.git_repo.name }} parsed repository tags and run Source Build Routine
-      ansible.builtin.include_tasks: utilities/pkg-source-build-routine.yml
+      ansible.builtin.include_tasks: pkg-source-build-routine.yml
       with_items: "{{ autobuild.git_repo.parsed_tags }}"
       when: autobuild.git_repo.parsed_tags | length > 0
 
     - name: Source Build Routine for non-tagged git repository
-      ansible.builtin.include_tasks: utilities/pkg-source-build-routine.yml
+      ansible.builtin.include_tasks: pkg-source-build-routine.yml
       when: autobuild.git_repo.parsed_tags is not defined or (autobuild.git_repo.parsed_tags | length == 0)
 
 # TODO: Maybe figure out what to do with this...
 - name: Source Build Routine for non-tagged git repository
-  ansible.builtin.include_tasks: utilities/clear-build-variables.yml
+  ansible.builtin.include_tasks: clear-build-variables.yml
   tags: [never]

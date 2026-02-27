@@ -7,7 +7,9 @@
 # @param item?: {raw_tag: string, project: string, major: string, minor: string, patch: string}
 ---
 - name: Collect running user facts
-  ansible.builtin.include_tasks: utilities/sudo_user_facts.yml
+  ansible.builtin.include_role:
+    name: jcook3701.utils.general
+    task_from: sudo_user_facts.yml
   when: sudo_user is not defined
 
 - name: Initialize update-alternatives variables

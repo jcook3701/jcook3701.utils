@@ -4,7 +4,9 @@
 # This is a subroutine of pkg-source-build-routine
 ---
 - name: Collect running user facts
-  ansible.builtin.include_tasks: utilities/sudo_user_facts.yml
+  ansible.builtin.include_role:
+    name: jcook3701.utils.general
+    task_from: sudo_user_facts.yml
   when: sudo_user is not defined
 
 - name: Build {{ autobuild.git_repo.name }} from source using Make

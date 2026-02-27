@@ -7,7 +7,9 @@
 # @param item?: {raw_tag: string, project: string, major: string, minor: string, patch: string}
 ---
 - name: Collect running user facts
-  ansible.builtin.include_tasks: utilities/sudo_user_facts.yml
+  ansible.builtin.include_role:
+    name: jcook3701.utils.general
+    task_from: sudo_user_facts.yml
   when: sudo_user is not defined
 
 - name: Package Source Build Routine
@@ -17,7 +19,8 @@
       become_user: "{{ sudo_user }}"
       ansible.builtin.git:
         repo: >-
-          {{ git_providers[autobuild.git_repo.provider] }}{{ autobuild.git_repo.owner }}/{{ autobuild.git_repo.name }}.git
+          {{ git_providers[autobuild.git_repo.provider] -}}
+          {{ autobuild.git_repo.owner }}/{{ autobuild.git_repo.name }}.git
         version: "{{ item.raw_tag if item.raw_tag is defined else omit }}"
         dest: "{{ autobuild.git_repo.directory }}"
         update: true
@@ -25,7 +28,7 @@
       # TODO: Create symlink between
 
     - name: Update Bashrc File for git repositories with no build
-      ansible.builtin.include_tasks: utilities/bashrc-updater.yml
+      ansible.builtin.include_tasks: install-tools/bashrc-updater.yml
       when: autobuild.bashrc.enabled is true and autobuild.build.enabled is false
 
     - name: Package Source Build and Install
@@ -33,10 +36,10 @@
       block:
 
         - name: Initialize checkinstall variables
-          ansible.builtin.include_tasks: utilities/checkinstall-variable-init.yml
+          ansible.builtin.include_tasks: autovars/checkinstall-variable-init.yml
 
         - name: initialize update-alternatives variables
-          ansible.builtin.include_tasks: utilities/update-alternatives-variable-init.yml
+          ansible.builtin.include_tasks: autovars/update-alternatives-variable-init.yml
 
         - name: Build the full install path
           ansible.builtin.set_fact:
@@ -61,32 +64,34 @@
             msg: "{{ checkinstall }}"
 
         - name: Meson Ninja Build
-          ansible.builtin.include_tasks: utilities/meson-ninja-build.yml
+          ansible.builtin.include_tasks: build-tools/meson-ninja-build.yml
           when: autobuild.build.script == "meson-ninja"
 
         - name: Make Build
-          ansible.builtin.include_tasks: utilities/make-build.yml
+          ansible.builtin.include_tasks: build-tools/make-build.yml
           when: autobuild.build.script == "make"
 
         - name: Cmake Build
-          ansible.builtin.include_tasks: utilities/cmake-build.yml
+          ansible.builtin.include_tasks: build-tools/cmake-build.yml
           when: autobuild.build.script == "cmake"
 
         - name: Checkinstall
-          ansible.builtin.include_tasks: utilities/checkinstall.yml
+          ansible.builtin.include_tasks: install-tools/checkinstall.yml
           when: autobuild.build.checkinstall is true
 
           # TODO: need to auto-generate either lib or bin path if installed with prefix and no bashrc.block
           # use autobuild.build.prefix.
           # TODO: - name:
-          # TODO: ansible.builtin.include_tasks: utilities/bashrc-variable-init.yml
+          # TODO: ansible.builtin.include_tasks: bashrc-variable-init.yml
 
         - name: Update Bashrc File for git repositories with build prefix
-          ansible.builtin.include_tasks: utilities/bashrc-updater.yml
+          ansible.builtin.include_tasks: install-tools/bashrc-updater.yml
           when: autobuild.bashrc.enabled and autobuild.build.prefix
 
         - name: update-alternatives
-          ansible.builtin.include_tasks: utilities/update-alternatives.yml
+          ansible.builtin.include_role:
+            name: jcook3701.utils.general
+            task_from: update-alternatives.yml
           when: autobuild.build.update_alternatives
 
         - name: Run ldconfig after library install
