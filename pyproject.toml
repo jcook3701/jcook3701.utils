@@ -266,7 +266,13 @@ python_version = "3.11"
 mypy_path = [
   "plugins",
 ]
+exclude = [
+  '^collections/',
+  '^docs/',
+  '\.egg-info/'
+]
 namespace_packages = true
+explicit_package_bases = true
 strict = true
 warn_unused_ignores = true
 warn_unused_configs = true
