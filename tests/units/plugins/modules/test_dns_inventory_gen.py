@@ -22,7 +22,7 @@
 from __future__ import annotations
 
 from typing import Any
-from unittest.mock import MagicMock, NonCallableMagicMock, mock_open, patch
+from unittest.mock import MagicMock, mock_open, patch
 
 import yaml
 from ansible_collections.jcook3701.utils.plugins.modules.dns_inventory_gen import (

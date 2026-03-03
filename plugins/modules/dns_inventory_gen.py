@@ -36,8 +36,8 @@ def parse_dns_zone(zone_file: str) -> list[DnsRecord]:
     """Parse the DNS zone file using native list generics."""
     records: list[DnsRecord] = []
     with open(zone_file) as file:
-        for line in file:
-            line = line.strip()
+        for raw_line in file:
+            line = raw_line.strip()
             if not line or line.startswith(";"):
                 continue
             parts = re.split(r"\s+", line)
@@ -69,7 +69,7 @@ def run_module() -> None:
             hostname, _, _, ip = record[:4]
             ip_to_hostname[ip] = hostname
 
-        sorted_ips = sorted(ip_to_hostname.keys(), key=lambda ip: ip_address(ip))
+        sorted_ips = sorted(ip_to_hostname.keys(), key=ip_address)
 
         inventory = {
             "all": {

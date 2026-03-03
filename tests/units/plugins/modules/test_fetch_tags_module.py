@@ -20,12 +20,13 @@
 
 from __future__ import annotations
 
-from typing import Any
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock, patch
+
 import pytest
 
 # Fixed: Importing 'main' because that is what is in your source file
 from ansible_collections.jcook3701.utils.plugins.modules.fetch_tags_module import (
+    PLATFORMS,
     fetch_tags,
     main,
 )
@@ -119,10 +120,6 @@ def test_platform_url_generation(
     platform: str, owner: str, repo: str, expected_url: str
 ) -> None:
     """Verify URL generation and GitLab path encoding."""
-    from ansible_collections.jcook3701.utils.plugins.modules.fetch_tags_module import (
-        PLATFORMS,
-    )
-
     config = PLATFORMS[platform]
     generated_url: str = config.get_url(owner, repo)
     assert generated_url == expected_url

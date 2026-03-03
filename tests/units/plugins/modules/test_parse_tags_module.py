@@ -86,7 +86,7 @@ def test_main_success(mock_ansible_module: MagicMock) -> None:
 
     # Capture the output sent to exit_json
     mock_module_instance.exit_json.assert_called_once()
-    args, kwargs = mock_module_instance.exit_json.call_args
+    _args, kwargs = mock_module_instance.exit_json.call_args
 
     assert kwargs["changed"] is False
     assert len(kwargs["parsed_tags"]) == 2
