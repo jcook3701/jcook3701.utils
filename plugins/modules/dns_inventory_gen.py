@@ -36,7 +36,7 @@ description:
     - It extracts A and AAAA records while ignoring SOA and NS records.
 version_added: "1.0.0"
 author:
-    - jcook3701
+    - Jared Cook
 options:
     zone_file:
         description: Path to the DNS zone file to parse.

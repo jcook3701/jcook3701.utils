@@ -34,7 +34,7 @@ description:
     - It extracts defaults, tasks, and metadata from roles and formats them into Markdown.
 version_added: "1.0.0"
 author:
-    - jcook3701
+    - Jared Cook
 options:
     roles_path:
         description: The path to the directory containing Ansible roles.

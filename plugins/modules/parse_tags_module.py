@@ -32,7 +32,7 @@ description:
     - Supports formats like v1.2.3, project-1.2.3, or raw 1.2.3.
 version_added: "1.0.0"
 author:
-    - jcook3701
+    - Jared Cook
 options:
     tags:
         description: A list of tag strings to be parsed.
