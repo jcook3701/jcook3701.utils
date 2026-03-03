@@ -59,6 +59,9 @@ build_ignore:
   - "docs"
   - ".venv"
   - "Makefile"
+  - "collections"
+  - "tests/unit"
+
 
 repository: >-
   https://github.com/jcook3701/jcook3701.utils

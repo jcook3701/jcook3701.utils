@@ -18,7 +18,6 @@
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-
 from __future__ import annotations  # Allows forward references and cleaner typing
 
 import re
@@ -27,6 +26,42 @@ from typing import Any
 
 import yaml
 from ansible.module_utils.basic import AnsibleModule
+
+DOCUMENTATION = r"""
+---
+module: dns_inventory_gen
+short_description: Generate Ansible inventory from DNS zone files
+description:
+    - This module parses a DNS zone file and generates a structured YAML inventory.
+    - It extracts A and AAAA records while ignoring SOA and NS records.
+version_added: "1.0.0"
+author:
+    - jcook3701
+options:
+    zone_file:
+        description: Path to the DNS zone file to parse.
+        type: str
+        required: true
+    output_file:
+        description: Path where the generated YAML inventory should be saved.
+        type: str
+        required: true
+"""
+
+EXAMPLES = r"""
+- name: Generate inventory from internal zone
+  jcook3701.utils.dns_inventory_gen:
+    zone_file: "/var/lib/bind/db.example.com"
+    output_file: "/etc/ansible/hosts.yml"
+"""
+
+RETURN = r"""
+message:
+    description: Confirmation message of the generation.
+    returned: success
+    type: str
+    sample: "Inventory created: /etc/ansible/hosts.yml"
+"""
 
 # Type Aliases using native generics
 DnsRecord = list[str]
