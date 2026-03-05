@@ -11,17 +11,17 @@
       ansible.builtin.set_fact:
         autobuild: null
 
-    - name: Set the local 'git_repo' variable within the autobuild variable
+    - name: Set the local 'autobuild_git_repo' variable within the autobuild variable
       ansible.builtin.set_fact:
         autobuild:
-          git_repo: "{{ git_repo }}"
+          git_repo: "{{ autobuild_git_repo }}"
       when: git_repo is defined
 
-    - name: Set the local 'build' variable within the autobuild variable
+    - name: Set the local 'autobuild_build' variable within the autobuild variable
       ansible.builtin.set_fact:
         autobuild: >-
           {{ autobuild
-            | combine({'build': build})
+            | combine({'build': autobuild_build})
           }}
       when: build is defined
 
@@ -32,11 +32,11 @@
 #          {{ autobuild | combine({'bashrc': bashrc }) }}
 #      when: bashrc is defined
 
-    - name: Set the local 'pkgs' variable within the autobuild variable
+    - name: Set the local 'autobuild_pkgs' variable within the autobuild variable
       ansible.builtin.set_fact:
         autobuild: >-
           {{ autobuild
-            | combine({'pkgs': pkgs})
+            | combine({'pkgs': autobuild_pkgs})
           }}
       when: pkgs is defined
 
