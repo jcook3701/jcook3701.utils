@@ -31,7 +31,7 @@ description:
     - This module connects to GitHub, GitLab, or GitLab-Freedesktop to retrieve repository tags.
 version_added: "1.0.0"
 author:
-    - jcook3701
+    - Jared Cook
 options:
     provider:
         description: The git hosting platform.
