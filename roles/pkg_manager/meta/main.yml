@@ -30,3 +30,6 @@ galaxy_info:
     - apps
 
 dependencies: []
+
+collections:
+  - jcook3701.utils

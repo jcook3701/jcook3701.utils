@@ -3,6 +3,6 @@
 ---
 - name: Ensure required packages are installed with dnf
   ansible.builtin.dnf:
-    name: "{{ pkg_manager_pkgs if pkg_manager_pkgs is list else [pkg_manager_pkgs] }}"
+    name: "{{ pkg_manager_pkgs if pkg_manager_pkgs is jcook3701.utils.list else [pkg_manager_pkgs] }}"
     state: "{{ pkg_manager_state | default('present') }}"
-    disable_gpg_check: "{{ pkg_manager_pkgs | select('match', '.*\\.rpm$') | list | length > 0 }}"
+    disable_gpg_check: "{{ pkg_manager_pkgs | select('match', '.*\\.rpm$') | jcook3701.utils.list | length > 0 }}"

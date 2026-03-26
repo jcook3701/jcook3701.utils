@@ -3,5 +3,5 @@
 ---
 - name: Ensure required packages are installed
   ansible.builtin.package:
-    name: "{{ pkg_manager_pkgs if pkg_manager_pkgs is list else [pkg_manager_pkgs] }}"
+    name: "{{ pkg_manager_pkgs if pkg_manager_pkgs is jcook3701.utils.list else [pkg_manager_pkgs] }}"
     state: "{{ pkg_manager_state | default('present') }}"

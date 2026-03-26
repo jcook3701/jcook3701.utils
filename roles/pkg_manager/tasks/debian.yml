@@ -7,4 +7,4 @@
     deb: "{{ item if item.endswith('.deb') else omit }}"
     state: "{{ pkg_manager_state }}"
     update_cache: "{{ pkg_manager_update_cache }}"
-  loop: "{{ pkg_manager_pkgs if pkg_manager_pkgs is list else [pkg_manager_pkgs] }}"
+  loop: "{{ pkg_manager_pkgs if pkg_manager_pkgs is jcook3701.utils.list else [pkg_manager_pkgs] }}"
