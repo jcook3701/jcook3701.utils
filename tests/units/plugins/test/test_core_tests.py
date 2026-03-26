@@ -25,7 +25,6 @@ from ansible_collections.jcook3701.utils.plugins.test.core_tests import (
     is_list,
 )
 
-
 TestModule.__test__ = False
 
 
