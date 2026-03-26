@@ -1,0 +1,20 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+argument_specs:
+  main:
+    short_description: "Custom package manager for jcook3701.utils"
+    options:
+      pkg_manager_pkgs:
+        type: "list"
+        elements: "str"
+        required: true
+        description: "List of packages or file paths to install"
+      pkg_manager_state:
+        type: "str"
+        default: "present"
+        choices: ["present", "absent"]
+      pkg_manager_update_cache:
+        type: "bool"
+        default: true
+        description: "Whether to update the package manager cache before install"

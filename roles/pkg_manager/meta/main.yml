@@ -3,7 +3,7 @@
 ---
 galaxy_info:
   author: Jared Cook
-  description: ""
+  description: "Automated package management for multiple distributions"
   # company: "Optional Company Name"
 
   license: "AGPL-3.0-or-later"

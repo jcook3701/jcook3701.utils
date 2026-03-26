@@ -36,8 +36,9 @@ The {{ site.title }} documentation is available at [docs]({{ site.github_io_url 
 
 ## 🤝 Contributing
 
-If you're interested in contributing to the {{ site.title }} project:  
-* Start by reading the [contributing guide]({{ site.github_io_url }}/manual/developer-resources/contribute).  
+If you're interested in contributing to the {{ site.title }} project:
+
+* Start by reading the [contributing guide]({{ site.github_io_url }}/manual/developer-resources/contribute)  
 * Learn how to setup your local environment, in our [developer guide]({{ site.github_io_url }}/manual/contribute/developer-guide).  
 * Look through our [style guide]({{ site.github_io_url }}/manual/contribute/style-guides/index).  
 

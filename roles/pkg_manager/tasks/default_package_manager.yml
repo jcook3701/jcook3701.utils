@@ -1,0 +1,7 @@
+# Subroutine of pkg-source-build-init-routine
+# Purpose is to install proper package dependencies regardless of operating system.
+---
+- name: Ensure required packages are installed
+  ansible.builtin.package:
+    name: "{{ pkg_manager_pkgs if pkg_manager_pkgs is list else [pkg_manager_pkgs] }}"
+    state: "{{ pkg_manager_state | default('present') }}"

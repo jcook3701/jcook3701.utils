@@ -6,27 +6,12 @@
 ---
 - name: Package Manager Switch
   block:
-    - name: Print Packages to Install with apt-get
+    - name: Print Packages to Install
       ansible.builtin.debug:
-        msg: "{{ pkg_manager_pkgs.apt }}"
-      when: ansible_facts['os_family']|lower == 'debian' and pkgs.apt is defined
+        msg: "{{ pkg_manager_pkgs }}"
 
-    - name: Ensure required packages are installed with apt-get
-      ansible.builtin.apt:
-        pkg: "{{ pkg_manager_pkgs.apt }}"
-        state: present
-        update_cache: true
-      when: ansible_facts['os_family']|lower == 'debian' and pkgs.apt is defined
-
-    - name: Ensure required packages are installed with dnf
-      ansible.builtin.dnf:
-        name: "{{ pkg_manager_pkgs.dnf }}"
-        state: present
-      when: ansible_facts['os_family']|lower == 'redhat' and pkgs.def is defined
-
-    - name: Ensure required packages are installed with pacman
-      community.general.pacman:
-        name: "{{ pkg_manager_pkgs.pacman }}"
-        state: present
-        update_cache: true
-      when: ansible_facts['os_family']|lower == 'archlinux' and pkgs.pacman is defined
+    - name: Load OS-specific specific package manager
+      ansible.builtin.include_tasks: "{{ item }}"
+      with_first_found:
+        - "{{ ansible_facts['os_family'] | lower }}.yml"
+        - "default_package_manager.yml"
