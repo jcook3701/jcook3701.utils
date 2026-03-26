@@ -1,0 +1,17 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+
+# Subroutine of pkg-source-build-init-routine
+# Purpose is to install proper package dependencies regardless of operating system.
+---
+- name: Package Manager Switch
+  block:
+    - name: Print Packages to Install
+      ansible.builtin.debug:
+        msg: "{{ pkg_manager_pkgs }}"
+
+    - name: Load OS-specific specific package manager
+      ansible.builtin.include_tasks: "{{ item }}"
+      with_first_found:
+        - "{{ ansible_facts['os_family'] | lower }}.yml"
+        - "default_package_manager.yml"
