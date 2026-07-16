@@ -3,13 +3,14 @@
 ---
 galaxy_info:
   author: Jared Cook
-  description: ""
+  description: >-
+    A generic utility role to safely add cross-platform repositories.
   # company: "Optional Company Name"
 
   license: "AGPL-3.0-or-later"
 
   min_ansible_version: ">=2.10"
-  role_name: snap
+  role_name: repo_add
 
   platforms:
     - name: EL
@@ -22,11 +23,19 @@ galaxy_info:
     - name: Ubuntu
       versions:
         - all
+    - name: ArchLinux
+      versions:
+        - all
 
   galaxy_tags:
-    - homelab
+    - centos
+    - debian
+    - archlinux
     - desktop
     - server
     - apps
 
 dependencies: []
+
+collections:
+  - community.general

@@ -1,0 +1,13 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+repo_add_arch_server: "https://example.com"
+repo_add_arch_sig_level: "Optional TrustAll"
+
+repo_add_pkg_names:
+  - ca-certificates
+  - curl
+  - gnupg
+
+repo_add_directory:
+  sources: "/etc/pacman.d/custom"

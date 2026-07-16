@@ -52,7 +52,7 @@ class TestCoreTests(unittest.TestCase):
         self.assertFalse(is_list("not a list"))
         self.assertFalse(is_list(123))
         self.assertFalse(is_list({"key": "value"}))
-        self.assertFalse(is_list((1, 2)))  # Tuples are not lists
+        self.assertFalse(is_list((1, 2)))
         self.assertFalse(is_list(None))
 
 

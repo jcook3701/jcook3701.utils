@@ -1,0 +1,57 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+argument_specs:
+  main:
+    short_description: A generic utility to safely manage cross-platform repositories.
+    description: >-
+      This role dynamically configures native repository definitions across Debian,
+      Red Hat, and Arch Linux systems using modern package management standards.
+    options:
+      repo_add_id:
+        type: str
+        required: true
+        description: "The unique shorthand identifier used for the repository filename and INI configuration block headers."
+
+      repo_add_name:
+        type: str
+        required: true
+        description: "The descriptive, human-readable name assigned to the repository."
+
+      repo_add_enabled:
+        type: bool
+        default: true
+        description: "Determines whether the repository index is actively checked by the system package manager."
+
+      # Debian Scoped Overrides (Passed dynamically by orchestrator)
+      repo_add_debian_uris:
+        type: str
+        required: false
+        description: "The base distribution package download URL for Debian/Ubuntu systems."
+
+      repo_add_debian_suites:
+        type: str
+        required: false
+        description: "The specific distribution release codename (e.g., bookworm, jammy)."
+
+      repo_add_debian_components:
+        type: str
+        required: false
+        description: "The repository sections to track (e.g., main, stable, contrib)."
+
+      repo_add_debian_signed_by:
+        type: str
+        required: false
+        description: "An HTTPS web URL or local file path pointing to the cryptographic validation GPG key."
+
+      # Red Hat Scoped Overrides
+      repo_add_redhat_baseurl:
+        type: str
+        required: false
+        description: "The upstream mirror URL pointing to the standard RPM package directory tree."
+
+      # Arch Linux Scoped Overrides
+      repo_add_arch_server:
+        type: str
+        required: false
+        description: "The remote server path hosting package databases for pacman configuration files."

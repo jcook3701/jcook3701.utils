@@ -1,0 +1,19 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: Ensure Arch Linux custom folder structure exists
+  ansible.builtin.file:
+    path: "{{ repo_add_directory.sources }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0775"
+
+- name: Configure Arch Linux Custom Repository
+  ansible.builtin.template:
+    src: arch.conf.j2
+    dest: "{{ repo_add_directory.sources }}/{{ repo_add_id }}.conf"
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Refresh arch cache

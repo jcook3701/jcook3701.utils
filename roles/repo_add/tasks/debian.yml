@@ -1,0 +1,31 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: Ensure Debian APT keyrings directory exists
+  ansible.builtin.file:
+    path: "{{ repo_add_directory.keyrings }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: Handle remote Debian GPG key downloads automatically
+  ansible.builtin.get_url:
+    url: "{{ repo_add_debian_signed_by | default(repo_add_debian_signed_by) }}"
+    dest: "{{ repo_add_directory.keyrings }}/{{ repo_add_id }}.asc"
+    owner: root
+    group: root
+    mode: "0644"
+    force: true
+  when:
+    - (repo_add_debian_signed_by | default(repo_add_debian_signed_by)).startswith('http://') or
+      (repo_add_debian_signed_by | default(repo_add_debian_signed_by)).startswith('https://')
+
+- name: Configure Debian DEB822 Repository
+  ansible.builtin.template:
+    src: debian.sources.j2
+    dest: "{{ repo_add_directory.sources }}/{{ repo_add_id }}.sources"
+    owner: root
+    group: root
+    mode: "0644"
+  notify: Refresh debian cache

@@ -1,0 +1,26 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+repo_add_deb_architecture:
+  armv6l: "armhf"
+  armv7l: "armhf"
+  aarch64: "arm64"
+  x86_64: "amd64"
+  i386: "i386"
+
+repo_add_debian_arch: "{{ repo_add_deb_architecture[ansible_architecture] | default(ansible_architecture) }}"
+repo_add_debian_types: "deb"
+repo_add_debian_uris: "https://example.com"
+repo_add_debian_suites: "stable" # e.g., bookworm, trixie, focal (Codename)
+repo_add_debian_components: "main" # e.g., stable, testing, main, contrib
+repo_add_debian_signed_by: "https://example.com"
+
+repo_add_pkg_names:
+  - apt-transport-https
+  - ca-certificates
+  - curl
+  - gnupg
+
+repo_add_directory:
+  keyrings: "/etc/apt/keyrings"
+  sources: "/etc/apt/sources.list.d"

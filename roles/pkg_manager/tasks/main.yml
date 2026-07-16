@@ -11,7 +11,9 @@
         msg: "{{ pkg_manager_pkgs }}"
 
     - name: Load OS-specific specific package manager
-      ansible.builtin.include_tasks: "{{ item }}"
+      ansible.builtin.include_tasks: "{{ task_file }}"
       with_first_found:
         - "{{ ansible_facts['os_family'] | lower }}.yml"
         - "default_package_manager.yml"
+      loop_control:
+        loop_var: task_file

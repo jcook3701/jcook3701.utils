@@ -1,0 +1,31 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: Verify global repository parameters are defined
+  ansible.builtin.assert:
+    that:
+      - repo_add_id != "example"
+      - repo_add_name != "Example Repository"
+    fail_msg: "CRITICAL: You must provide a valid 'repo_add_id' and 'repo_add_name' to run this role."
+
+- name: Verify Debian specific repository requirements
+  ansible.builtin.assert:
+    that:
+      - repo_add_debian_uris != "https://example.com"
+      - repo_add_debian_signed_by != "https://example.com"
+    fail_msg: "CRITICAL: Debian hosts require both 'repo_add_debian_uris' and 'repo_add_debian_signed_by' parameters."
+  when: ansible_os_family == "Debian"
+
+- name: Verify Red Hat specific repository requirements
+  ansible.builtin.assert:
+    that:
+      - repo_add_redhat_baseurl != "https://example.com"
+    fail_msg: "CRITICAL: Red Hat hosts require the 'repo_add_redhat_baseurl' parameter."
+  when: ansible_os_family == "RedHat"
+
+- name: Verify Arch Linux specific repository requirements
+  ansible.builtin.assert:
+    that:
+      - repo_add_arch_server != "https://example.com"
+    fail_msg: "CRITICAL: Arch Linux hosts require the 'repo_add_arch_server' parameter."
+  when: ansible_os_family == "Archlinux"
