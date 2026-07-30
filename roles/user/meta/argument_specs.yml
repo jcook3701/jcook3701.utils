@@ -18,6 +18,11 @@ argument_specs:
         required: true
         description: "The actual system login account username handle string to provision."
 
+      user_password:
+        type: str
+        default: ""
+        description: "The cleartext user account password string to be securely hashed using SHA-512 during execution passes."
+
       user_uid:
         type: int
         description: "Optional explicit POSIX User ID integer to assign to the account."

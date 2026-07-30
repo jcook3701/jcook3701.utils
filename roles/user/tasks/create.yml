@@ -4,12 +4,13 @@
 - name: Ensure target POSIX user account is present on system
   ansible.builtin.user:
     name: "{{ user_name }}"
-    uid: "{{ user_uid | default(omit) }}"
-    group: "{{ user_gid | default(omit) }}"
+    uid: "{{ user_uid if user_uid | string | length > 0 else omit }}"
+    group: "{{ user_gid if user_gid | string | length > 0 else omit }}"
     groups: "{{ user_groups }}"
     append: true
     shell: "{{ user_shell }}"
     home: "{{ user_home | default('/home/' + user_name) }}"
+    password: "{{ user_password | password_hash('sha512') if user_password | string | length > 0 else omit }}"
     state: "present"
   register: system_user_created
 

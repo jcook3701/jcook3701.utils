@@ -6,6 +6,7 @@ user_state: "present"
 
 # The system login account user information
 user_name: "example"
+user_password: ""
 user_uid: ""
 user_gid: ""
 user_home_dir: "/home/{{ user_name }}"
