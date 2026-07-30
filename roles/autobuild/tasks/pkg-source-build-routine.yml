@@ -6,12 +6,6 @@
 
 # @param item?: {raw_tag: string, project: string, major: string, minor: string, patch: string}
 ---
-- name: Collect running user facts
-  ansible.builtin.include_role:
-    name: jcook3701.utils.general
-    task_from: sudo_user_facts.yml
-  when: sudo_user is not defined
-
 - name: Package Source Build Routine
   block:
     - name: Clone {{ autobuild.git_repo.name }} repository
@@ -91,7 +85,7 @@
         - name: update-alternatives
           ansible.builtin.include_role:
             name: jcook3701.utils.general
-            task_from: update-alternatives.yml
+            tasks_from: update-alternatives.yml
           when: autobuild.build.update_alternatives
 
         - name: Run ldconfig after library install

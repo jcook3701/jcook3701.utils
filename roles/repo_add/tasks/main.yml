@@ -20,4 +20,4 @@
     - "{{ ansible_os_family | lower }}.yml"
     - "repo/default.yml"
   when:
-    - ansible_os_family in ['Debian', 'RedHat', 'Archlinux']`
+    - ansible_os_family in ['Debian', 'RedHat', 'Archlinux']

@@ -1,0 +1,50 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+argument_specs:
+  main:
+    short_description: A multipurpose utility role to execute administrative tasks.
+    description: >-
+      This role provides an on-demand dispatcher pattern allowing orchestrators
+      to safely trigger specific baseline administrative utilities via variable toggles.
+    options:
+      general_task_action:
+        type: str
+        default: "none"
+        choices:
+          - "none"
+          - "all"
+          - "apt_clean"
+          - "package_facts"
+          - "reload_shell"
+          - "sudo_user_facts"
+          - "update_alternatives"
+        description: >-
+          The primary operational action switch. Select a targeted string keyword
+          to isolate execution to a single specific sub-task script, or use 'all'
+          to process the entire collection sequence consecutively.
+
+      general_enable_apt_clean:
+        type: bool
+        default: false
+        description: "Granular flag toggle to explicitly trigger the 'apt-clean-and-update.yml' task block."
+
+      general_enable_package_facts:
+        type: bool
+        default: false
+        description: "Granular flag toggle to explicitly trigger the 'package-facts.yml' task block."
+
+      general_enable_reload_shell:
+        type: bool
+        default: false
+        description: "Granular flag toggle to explicitly trigger the 'reload-shell.yml' task block."
+
+      general_enable_sudo_user_facts:
+        type: bool
+        default: false
+        description: "Granular flag toggle to explicitly trigger the 'sudo_user_facts.yml' task block."
+
+      general_enable_update_alternatives:
+        type: bool
+        default: false
+        description: "Granular flag toggle to explicitly trigger the 'update-alternatives.yml' task block."

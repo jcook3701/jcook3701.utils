@@ -1,0 +1,57 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+argument_specs:
+  main:
+    short_description: "Centralized user identity lifecycle provisioning specification blueprint."
+    description: "Enforces strict typechecking and compliance controls for provisioning human administrator accounts, generating modern keys, and bootstrapping access handles."
+    author: "Jared Cook"
+    options:
+      user_state:
+        type: str
+        default: "present"
+        choices: ["present", "absent"]
+        description: "The intended lifecycle state of the targeted user account profile."
+
+      user_name:
+        type: str
+        required: true
+        description: "The actual system login account username handle string to provision."
+
+      user_uid:
+        type: int
+        description: "Optional explicit POSIX User ID integer to assign to the account."
+
+      user_gid:
+        type: int
+        description: "Optional explicit POSIX Group ID integer to assign to the primary account group."
+
+      user_home:
+        type: str
+        description: "The absolute custom filesystem path mapping for the user home folder space. Defaults to /home/username."
+
+      user_shell:
+        type: str
+        default: "/bin/bash"
+        description: "The default interactive login shell execution binary path assigned to the profile."
+
+      user_groups:
+        type: list
+        elements: str
+        default: ["sudo"]
+        description: "An array of supplemental security groups to attach the user to for escalation privileges."
+
+      user_enable_ssh:
+        type: bool
+        default: true
+        description: "Toggles the entire secure shell configuration layer, including directory security and keypair generation."
+
+      user_enable_bash:
+        type: bool
+        default: false
+        description: "Toggles the deployment of tailored user profile initializations and terminal customization scripts."
+
+      user_public_key_path:
+        type: str
+        default: "~/.ssh/id_ed25519.pub"
+        description: "The local controller file path tracking the active public key to copy to the target host for passwordless authentication."

@@ -3,7 +3,9 @@
 ---
 galaxy_info:
   author: Jared Cook
-  description: ""
+  description: >-
+    This role provides an on-demand dispatcher pattern allowing orchestrators
+    to safely trigger specific baseline administrative utilities via variable toggles.
   # company: "Optional Company Name"
 
   license: "AGPL-3.0-or-later"
@@ -30,3 +32,6 @@ galaxy_info:
     - apps
 
 dependencies: []
+
+collections:
+  - "community.crypto"

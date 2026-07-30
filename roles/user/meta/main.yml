@@ -1,0 +1,38 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+galaxy_info:
+  author: Jared Cook
+  description: >-
+    Isolated user account provisioning and secure
+    cryptographic environment utilities.
+  # company: "Optional Company Name"
+
+  license: "AGPL-3.0-or-later"
+
+  min_ansible_version: ">=2.10"
+  role_name: user
+
+  platforms:
+    - name: EL
+      versions:
+        - "8"
+        - "9"
+    - name: Debian
+      versions:
+        - all
+    - name: Ubuntu
+      versions:
+        - all
+
+  galaxy_tags:
+    - homelab
+    - desktop
+    - server
+    - apps
+
+dependencies: []
+
+collections:
+  - "community.crypto"
+  - "ansible.posix"
