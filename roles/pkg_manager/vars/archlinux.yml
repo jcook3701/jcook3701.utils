@@ -1,0 +1,9 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+pkg_manager_file_regex: '.*\.pkg\.tar\..*$'
+pkg_manager_pacman_args: >-
+  --needed
+  {% if pkg_manager_state == 'absent' %}
+  {% if pkg_manager_remove_level == 'autoremove' %}-s{% elif pkg_manager_remove_level == 'purge' %}-n{% elif pkg_manager_remove_level == 'complete' %}-ns{% endif %}
+  {% endif %}

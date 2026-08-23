@@ -8,6 +8,7 @@
     owner: root
     group: root
     mode: "0775"
+  become: true
 
 - name: Configure Arch Linux Custom Repository
   ansible.builtin.template:
@@ -16,4 +17,5 @@
     owner: root
     group: root
     mode: "0644"
+  become: true
   notify: Refresh arch cache

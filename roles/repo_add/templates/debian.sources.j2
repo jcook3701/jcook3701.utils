@@ -18,9 +18,20 @@
 # along with this program.  If not, see <https://www.gnu.org/licenses/>.
 #}
 
+{%- macro resolve_key_path() -%}
+{# Helper macro to resolve absolute local key paths with fallback to the role-managed keyring #}
+  {%- if repo_add_debian_signed_by is defined and repo_add_debian_signed_by | length > 0
+        and not repo_add_debian_signed_by.startswith('http') -%}
+    {{- repo_add_debian_signed_by -}}
+  {%- else -%}
+    {{- (repo_add_directory.keyrings | default('/etc/apt/keyrings')).rstrip('/') ~ '/' ~ repo_add_id ~ '.asc' -}}
+  {%- endif -%}
+{%- endmacro -%}
+
 {%- macro debian_repo() -%}
+{# Main template macro rendering the DEB822 repository configuration sheet #}
 X-Repolib-Name: {{ repo_add_name }}
-Types: {{ repo_add_debian_types }}
+Types: {{ repo_add_debian_types | default('deb') }}
 URIs: {{ repo_add_debian_uris }}
 Suites: {{ repo_add_debian_suites }}
 Components: {{ repo_add_debian_components }}

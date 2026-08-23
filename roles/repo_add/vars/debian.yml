@@ -15,11 +15,12 @@ repo_add_debian_suites: "stable" # e.g., bookworm, trixie, focal (Codename)
 repo_add_debian_components: "main" # e.g., stable, testing, main, contrib
 repo_add_debian_signed_by: "https://example.com"
 
-repo_add_pkg_names:
+repo_add_os_pkg_names:
   - apt-transport-https
   - ca-certificates
   - curl
   - gnupg
+  - lsb-release
 
 repo_add_directory:
   keyrings: "/etc/apt/keyrings"

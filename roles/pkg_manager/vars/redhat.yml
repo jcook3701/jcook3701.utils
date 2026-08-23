@@ -1,0 +1,5 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+pkg_manager_file_regex: '.*\.rpm$'
+pkg_manager_autoremove: "{{ true if (pkg_manager_state == 'absent' and pkg_manager_remove_level in ['autoremove', 'complete']) else false }}"

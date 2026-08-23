@@ -6,7 +6,7 @@ repo_add_redhat_gpgcheck: true
 repo_add_redhat_repo_gpgcheck: true
 repo_add_redhat_gpgkey: "https://example.com"
 
-repo_add_pkg_names:
+repo_add_os_pkg_names:
   - ca-certificates
   - curl
   - gnupg2

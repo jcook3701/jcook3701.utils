@@ -3,18 +3,40 @@
 ---
 argument_specs:
   main:
-    short_description: "Custom package manager for jcook3701.utils"
+    short_description: Unified package manager switcher role.
+    description: Manages packages across Debian, RedHat, and Arch systems using a unified interface.
     options:
       pkg_manager_pkgs:
-        type: "list"
-        elements: "str"
+        type: list
+        elements: str
         required: true
-        description: "List of packages or file paths to install"
+        description: List of package names or local package file paths/URLs to manage.
+
       pkg_manager_state:
-        type: "str"
-        default: "present"
-        choices: ["present", "absent"]
+        type: str
+        default: present
+        choices:
+          - present
+          - absent
+          - latest
+        description: Target state for the packages.
+
+      pkg_manager_remove_level:
+        type: str
+        default: standard
+        choices:
+          - standard
+          - purge
+          - autoremove
+          - complete
+        description: Cleanliness level when pkg_manager_state is set to 'absent'.
+
       pkg_manager_update_cache:
-        type: "bool"
+        type: bool
         default: true
-        description: "Whether to update the package manager cache before install"
+        description: Whether to update the repository cache before running actions.
+
+      pkg_manager_verbose:
+        type: bool
+        default: false
+        description: Enable verbose logging options if applicable.

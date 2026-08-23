@@ -1,0 +1,16 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: Purge Red Hat Repo Template Configuration File
+  ansible.builtin.file:
+    path: "{{ repo_add_directory.sources }}/{{ repo_add_id }}.repo"
+    state: absent
+  become: true
+  notify: "Refresh redhat cache"
+
+- name: Purge Associated Cryptographic GPG Validation Keyring (If Local File Exists)
+  ansible.builtin.file:
+    path: "/etc/pki/rpm-gpg/RPM-GPG-KEY-{{ repo_add_id }}"
+    state: absent
+  become: true
+  notify: "Refresh redhat cache"

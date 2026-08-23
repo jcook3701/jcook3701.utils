@@ -1,6 +1,22 @@
 # SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
 # SPDX-License-Identifier: AGPL-3.0-or-later
 ---
+# The list of packages to manage
 pkg_manager_pkgs: []
+
+# Desired state of the packages: present, absent, latest
 pkg_manager_state: present
+
+# Removal style used only when pkg_manager_state is 'absent'
+# Choices:
+#   - 'standard'    : Removes package binaries only.
+#   - 'purge'       : Removes package binaries and configuration files.
+#   - 'autoremove'  : Removes package binaries and unused dependencies.
+#   - 'complete'    : Removes package, configurations, and unused dependencies.
+pkg_manager_remove_level: standard
+
+# Update the repository cache before managing packages
 pkg_manager_update_cache: true
+
+# Control Ansible Role Debugging Verbosity Level
+pkg_manager_verbose: false

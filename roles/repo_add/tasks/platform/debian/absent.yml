@@ -1,0 +1,16 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: Purge Debian DEB822 Repository Source File
+  ansible.builtin.file:
+    path: "{{ repo_add_directory.sources }}/{{ repo_add_id }}.sources"
+    state: absent
+  become: true
+  notify: "Refresh debian cache"
+
+- name: Purge Associated Cryptographic GPG Validation Keyring
+  ansible.builtin.file:
+    path: "{{ repo_add_directory.keyrings }}/{{ repo_add_id }}.asc"
+    state: absent
+  become: true
+  notify: "Refresh debian cache"

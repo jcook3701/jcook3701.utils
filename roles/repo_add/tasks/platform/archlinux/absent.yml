@@ -1,0 +1,9 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: Purge Arch Linux Custom Repo Template Configuration File
+  ansible.builtin.file:
+    path: "{{ repo_add_directory.sources }}/{{ repo_add_id }}.conf"
+    state: absent
+  become: true
+  notify: "Refresh arch cache"

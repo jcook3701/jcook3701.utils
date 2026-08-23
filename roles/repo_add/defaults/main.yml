@@ -1,6 +1,32 @@
 # SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
 # SPDX-License-Identifier: AGPL-3.0-or-later
 ---
-repo_add_id: "example"
-repo_add_name: "Example Repository"
+# The unique shorthand identifier used for the repository filename
+repo_add_id: ""
+
+# The descriptive, human-readable name assigned to the repository
+repo_add_name: ""
+
+# Determines whether the repository index is actively checked
 repo_add_enabled: true
+
+# The targeted lifecycle execution state ('present' or 'absent')
+repo_add_state: "present"
+# -------------------------------------------------------------------------
+# Debian Scoped Overrides (Passed dynamically by orchestrator)
+# -------------------------------------------------------------------------
+repo_add_debian_types: "deb"
+repo_add_debian_uris: ""
+repo_add_debian_suites: ""
+repo_add_debian_components: ""
+repo_add_debian_signed_by: ""
+# -------------------------------------------------------------------------
+# Red Hat Scoped Overrides
+# -------------------------------------------------------------------------
+repo_add_redhat_baseurl: ""
+repo_add_redhat_gpgkey: ""
+# -------------------------------------------------------------------------
+# Arch Linux Scoped Overrides
+# -------------------------------------------------------------------------
+repo_add_arch_sig_level: ""
+repo_add_arch_server: ""

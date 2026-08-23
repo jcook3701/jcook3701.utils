@@ -4,7 +4,7 @@
 repo_add_arch_server: "https://example.com"
 repo_add_arch_sig_level: "Optional TrustAll"
 
-repo_add_pkg_names:
+repo_add_os_pkg_names:
   - ca-certificates
   - curl
   - gnupg

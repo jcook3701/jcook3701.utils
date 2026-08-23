@@ -8,18 +8,21 @@
     owner: root
     group: root
     mode: "0755"
+  become: true
 
 - name: Handle remote Debian GPG key downloads automatically
   ansible.builtin.get_url:
-    url: "{{ repo_add_debian_signed_by | default(repo_add_debian_signed_by) }}"
+    url: "{{ repo_add_debian_signed_by }}"
     dest: "{{ repo_add_directory.keyrings }}/{{ repo_add_id }}.asc"
     owner: root
     group: root
     mode: "0644"
     force: true
+  become: true
   when:
+    - repo_add_debian_signed_by is defined
     - (repo_add_debian_signed_by | default(repo_add_debian_signed_by)).startswith('http://') or
-      (repo_add_debian_signed_by | default(repo_add_debian_signed_by)).startswith('https://')
+        (repo_add_debian_signed_by | default(repo_add_debian_signed_by)).startswith('https://')
 
 - name: Configure Debian DEB822 Repository
   ansible.builtin.template:
@@ -28,4 +31,5 @@
     owner: root
     group: root
     mode: "0644"
+  become: true
   notify: Refresh debian cache

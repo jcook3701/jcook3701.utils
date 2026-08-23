@@ -23,6 +23,18 @@ argument_specs:
         default: true
         description: "Determines whether the repository index is actively checked by the system package manager."
 
+      repo_add_state:
+        type: "str"
+        default: "present"
+        choices: ["present", "absent"]
+        description: "The targeted lifecycle execution state. Setting this property to 'absent' will trigger clean, systemic deletion of the repository configurations."
+
+      repo_add_debian_types:
+        type: "str"
+        default: "deb"
+        required: false
+        description: "The types of packages to fetch for Debian/Ubuntu systems (e.g., deb, deb-src)."
+
       # Debian Scoped Overrides (Passed dynamically by orchestrator)
       repo_add_debian_uris:
         type: str
@@ -49,6 +61,16 @@ argument_specs:
         type: str
         required: false
         description: "The upstream mirror URL pointing to the standard RPM package directory tree."
+
+      repo_add_redhat_gpgkey:
+        type: "str"
+        required: false
+        description: "An HTTPS web URL or local file path pointing to the repository's cryptographic GPG verification key."
+
+      repo_add_arch_sig_level:
+        type: "str"
+        required: false
+        description: "Cryptographic signature trust and verification requirements for this specific Arch Linux pacman repository block."
 
       # Arch Linux Scoped Overrides
       repo_add_arch_server:
