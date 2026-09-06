@@ -5,6 +5,7 @@
   ansible.builtin.package:
     name: "{{ pkg_manager_pkgs | reject('match', pkg_manager_file_regex) | list }}"
     state: "{{ pkg_manager_state }}"
+  become: true
   when: (pkg_manager_pkgs | reject('match', pkg_manager_file_regex) | list | length) > 0
 
 - name: Install local packages via generic package module
@@ -15,6 +16,7 @@
   loop_control:
     loop_var: "package"
     label: "{{ package }}"
+  become: true
   when:
     - pkg_manager_state in ['present', 'latest']
     - (pkg_manager_pkgs | select('match', pkg_manager_file_regex) | list | length) > 0

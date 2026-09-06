@@ -7,6 +7,7 @@
     state: "{{ pkg_manager_state }}"
     update_cache: "{{ pkg_manager_update_cache }}"
     extra_args: "{{ pkg_manager_pacman_args }}"
+  become: true
   when: (pkg_manager_pkgs | reject('match', pkg_manager_file_regex) | list | length) > 0
 
 - name: Install local Arch packages via pacman
@@ -18,6 +19,7 @@
   loop_control:
     loop_var: "package"
     label: "{{ package }}"
+  become: true
   when:
     - pkg_manager_state in ['present', 'latest']
     - (pkg_manager_pkgs | select('match', pkg_manager_file_regex) | list | length) > 0

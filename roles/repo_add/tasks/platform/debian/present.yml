@@ -3,17 +3,17 @@
 ---
 - name: Ensure Debian APT keyrings directory exists
   ansible.builtin.file:
-    path: "{{ repo_add_directory.keyrings }}"
+    path: "{{ repo_add_directory.keyrings | default('/etc/apt/keyrings') }}"
     state: directory
     owner: root
     group: root
     mode: "0755"
   become: true
 
-- name: Handle remote Debian GPG key downloads automatically
+- name: Download raw GPG or ASC key to temporary path
   ansible.builtin.get_url:
     url: "{{ repo_add_debian_signed_by }}"
-    dest: "{{ repo_add_directory.keyrings }}/{{ repo_add_id }}.asc"
+    dest: "{{ repo_add_file.tmp_key }}"
     owner: root
     group: root
     mode: "0644"
@@ -21,13 +21,54 @@
   become: true
   when:
     - repo_add_debian_signed_by is defined
-    - (repo_add_debian_signed_by | default(repo_add_debian_signed_by)).startswith('http://') or
-        (repo_add_debian_signed_by | default(repo_add_debian_signed_by)).startswith('https://')
+    - repo_add_debian_signed_by.startswith('http://')
+        or repo_add_debian_signed_by.startswith('https://')
+
+- name: Check if the downloaded key is ASCII armored
+  ansible.builtin.command:
+    cmd: "file {{ repo_add_file.tmp_key }}"
+  register: key_check
+  changed_when: false
+  become: true
+  when:
+    - repo_add_debian_signed_by is defined
+    - repo_add_debian_signed_by.startswith('http://')
+        or repo_add_debian_signed_by.startswith('https://')
+
+- name: Convert binary GPG key to ASCII armored format
+  ansible.builtin.command:
+    cmd: >
+      gpg --no-default-keyring
+      --keyring {{ repo_add_file.tmp_key }}
+      --export
+      --armor
+      -o {{ repo_add_file.asc }}
+  become: true
+  when:
+    - ('pgp public key block' not in key_check.stdout | lower)
+
+- name: Copy already armored ASC key into place directly
+  ansible.builtin.copy:
+    src: "{{ repo_add_file.tmp_key }}"
+    dest: "{{ repo_add_file.asc }}"
+    remote_src: true
+    owner: root
+    group: root
+    mode: "0644"
+  become: true
+  when:
+    - ('pgp public key block' in key_check.stdout | lower)
+
+- name: Clean up temporary key file
+  ansible.builtin.file:
+    path: "{{ repo_add_file.tmp_key }}"
+    state: absent
+  become: true
 
 - name: Configure Debian DEB822 Repository
   ansible.builtin.template:
     src: debian.sources.j2
-    dest: "{{ repo_add_directory.sources }}/{{ repo_add_id }}.sources"
+    dest: "{{ repo_add_file.deb822 }}"
     owner: root
     group: root
     mode: "0644"

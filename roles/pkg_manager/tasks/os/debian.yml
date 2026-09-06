@@ -8,6 +8,7 @@
     update_cache: "{{ pkg_manager_update_cache }}"
     purge: "{{ pkg_manager_purge }}"
     autoremove: "{{ pkg_manager_autoremove }}"
+  become: true
   when: (pkg_manager_pkgs | reject('match', pkg_manager_file_regex) | list | length) > 0
 
 - name: Install local .deb packages via apt
@@ -18,6 +19,7 @@
   loop_control:
     loop_var: "package"
     label: "{{ package }}"
+  become: true
   when:
     - pkg_manager_state in ['present', 'latest']
     - (pkg_manager_pkgs | select('match', pkg_manager_file_regex) | list | length) > 0

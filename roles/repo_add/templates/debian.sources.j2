@@ -38,7 +38,7 @@ Components: {{ repo_add_debian_components }}
 {% if repo_add_debian_arch %}
 Architectures: {{ repo_add_debian_arch }}
 {% endif %}
-Signed-By: {{ repo_add_directory.keyrings }}/{{ repo_add_id }}.asc
+Signed-By: {{ repo_add_file.asc }}
 Enabled: {{ 'yes' if repo_add_enabled else 'no' }}
 {%- endmacro -%}
 
