@@ -1,0 +1,9 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+container_engine_directory:
+  src: "{{ container_engine_project_src | default('/opt/container-stack') }}"
+
+container_engine_file:
+  compose: "{{ container_engine_directory.src ~ '/compose.yml'
+    | default('/opt/container-stack/docker-compose.yml') }}"

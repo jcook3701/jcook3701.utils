@@ -1,0 +1,8 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: Synchronize state requirements via Podman Compose
+  containers.podman.podman_compose:
+    project_src: "{{ container_engine_project_src }}"
+    state: "{{ 'absent' if (container_engine_desired_state in ['absent', 'teardown']) else 'present' }}"
+    pull: "{{ true if (container_engine_desired_state == 'present' and container_engine_pull_images | bool) else omit }}"

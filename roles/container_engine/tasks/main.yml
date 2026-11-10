@@ -1,0 +1,7 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: Route composition execution to target platform engine
+  ansible.builtin.include_tasks: >-
+    engines/{{ container_engine_platform_type | default('docker') }}.yml
+  when: container_engine_trigger_condition | bool

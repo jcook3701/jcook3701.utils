@@ -86,3 +86,7 @@ You can call this role directly from a playbook or as an embedded inclusion laye
 ## Requirements
 
 * **community.general** collection (required for **pacman** module support on Arch Linux targets).
+
+## Author Information
+
+Maintained by **Jared Cook** as part of the core infrastructure and container management ecosystem.

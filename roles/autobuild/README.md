@@ -11,3 +11,7 @@ To avoid linting errors, prefix your variables in your role's `vars/` and map th
     build: "{{ myrole_build }}"
     name: "{{ myrole_name }}"
 ```
+
+## Author Information
+
+Maintained by **Jared Cook** as part of the core infrastructure and container management ecosystem.

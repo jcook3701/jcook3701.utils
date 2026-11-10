@@ -28,8 +28,8 @@
   {%- endif -%}
 {%- endmacro -%}
 
-{%- macro debian_repo() -%}
-{# Main template macro rendering the DEB822 repository configuration sheet #}
+{%- macro DEB822() -%}
+{# Render DEB822 repository configuration block #}
 X-Repolib-Name: {{ repo_add_name }}
 Types: {{ repo_add_debian_types | default('deb') }}
 URIs: {{ repo_add_debian_uris }}
@@ -40,6 +40,19 @@ Architectures: {{ repo_add_debian_arch }}
 {% endif %}
 Signed-By: {{ repo_add_file.asc }}
 Enabled: {{ 'yes' if repo_add_enabled else 'no' }}
+{%- endmacro -%}
+
+{%- macro legacy() -%}
+{# Render legacy repository configuration line #}
+deb {% if repo_add_debian_arch %}[arch={{ repo_add_debian_arch }} signed-by={{ repo_add_file.asc }}]{% else %}[signed-by={{ repo_add_file.asc }}]{% endif %} {{ repo_add_debian_uris }} {{ repo_add_debian_suites }} {{ repo_add_debian_components }}
+{%- endmacro -%}
+
+{%- macro debian_repo() -%}
+{%- if repo_add_is_legacy_apt | bool -%}
+  {{- legacy() }}
+{%- else -%}
+  {{- DEB822() }}
+{%- endif -%}
 {%- endmacro -%}
 
 {{- debian_repo() }}
