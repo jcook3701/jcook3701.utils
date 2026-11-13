@@ -1,0 +1,26 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+# The intended lifecycle state of the account profile
+user_state: "present"
+
+# The system login account user information
+user_name: "example"
+user_password: ""
+user_uid: ""
+user_gid: ""
+user_home_dir: "/home/{{ user_name }}"
+
+# The default interactive login shell execution binary path
+user_shell: "/bin/bash"
+
+# Supplemental security groups to attach the user to for escalation privileges
+user_groups:
+  - "sudo"
+
+# User Feature Flags
+user_enable_ssh: true
+user_enable_bash: false
+
+# The local controller path tracking the active public key to copy to the target host
+user_public_key_path: "~/.ssh/id_ed25519.pub"

@@ -1,0 +1,15 @@
+# SPDX-License-Identifier: AGPL-3.0-or-later
+# Ansible Galaxy Project Dependency Requirements Matrix
+---
+# Centralized collection libraries required by custom roles
+collections:
+  # MANDATORY FOR UTILS: Pulls down the openssh_keypair cryptographic engine binaries natively
+  - name: "community.crypto"
+    version: ">=2.15.0"
+
+  # REQUIRED FOR AUTH HOOKS: Installs the authorized_key module extensions cleanly
+  - name: "ansible.posix"
+    version: ">=1.5.0"
+
+# Optional upstream galaxy role targets (Leave empty since you write your own custom roles)
+roles: []

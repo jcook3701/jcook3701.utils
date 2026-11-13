@@ -1,0 +1,58 @@
+{#
+# debian.sources.j2 for jcook3701.pkgs
+#
+# SPDX-FileCopyrightText: Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU Affero General Public License as
+# published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU Affero General Public License for more details.
+#
+# You should have received a copy of the GNU Affero General Public License
+# along with this program.  If not, see <https://www.gnu.org/licenses/>.
+#}
+
+{%- macro resolve_key_path() -%}
+{# Helper macro to resolve absolute local key paths with fallback to the role-managed keyring #}
+  {%- if repo_add_debian_signed_by is defined and repo_add_debian_signed_by | length > 0
+        and not repo_add_debian_signed_by.startswith('http') -%}
+    {{- repo_add_debian_signed_by -}}
+  {%- else -%}
+    {{- (repo_add_directory.keyrings | default('/etc/apt/keyrings')).rstrip('/') ~ '/' ~ repo_add_id ~ '.asc' -}}
+  {%- endif -%}
+{%- endmacro -%}
+
+{%- macro DEB822() -%}
+{# Render DEB822 repository configuration block #}
+X-Repolib-Name: {{ repo_add_name }}
+Types: {{ repo_add_debian_types | default('deb') }}
+URIs: {{ repo_add_debian_uris }}
+Suites: {{ repo_add_debian_suites }}
+Components: {{ repo_add_debian_components }}
+{% if repo_add_debian_arch %}
+Architectures: {{ repo_add_debian_arch }}
+{% endif %}
+Signed-By: {{ repo_add_file.signing_key }}
+Enabled: {{ 'yes' if repo_add_enabled else 'no' }}
+{%- endmacro -%}
+
+{%- macro legacy() -%}
+{# Render legacy repository configuration line #}
+deb {% if repo_add_debian_arch %}[arch={{ repo_add_debian_arch }} signed-by={{ repo_add_file.signing_key }}]{% else %}[signed-by={{ repo_add_file.signing_key }}]{% endif %} {{ repo_add_debian_uris }} {{ repo_add_debian_suites }} {{ repo_add_debian_components }}
+{%- endmacro -%}
+
+{%- macro debian_repo() -%}
+{%- if repo_add_is_legacy_apt | bool -%}
+  {{- legacy() }}
+{%- else -%}
+  {{- DEB822() }}
+{%- endif -%}
+{%- endmacro -%}
+
+{{- debian_repo() }}

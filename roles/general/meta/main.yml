@@ -3,11 +3,11 @@
 ---
 galaxy_info:
   author: Jared Cook
-  description: ""
-  # company: "Optional Company Name"
-
+  description: >-
+    This role provides an on-demand dispatcher pattern allowing orchestrators
+    to safely trigger specific baseline administrative utilities via variable toggles.
+  company: "Cook's Code, Inc."
   license: "AGPL-3.0-or-later"
-
   min_ansible_version: ">=2.10"
   role_name: general
 
@@ -30,3 +30,6 @@ galaxy_info:
     - apps
 
 dependencies: []
+
+collections:
+  - "community.crypto"

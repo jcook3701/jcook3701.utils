@@ -6,12 +6,13 @@
 - name: Collect running user facts
   ansible.builtin.include_role:
     name: jcook3701.utils.general
-    task_from: sudo_user_facts.yml
+    tasks_from: sudo_user_facts.yml
   when: sudo_user is not defined
 
-- name: debug
+- name: Debug Autobuild Variables
   ansible.builtin.debug:
     msg: "git_repo: {{ git_repo }}"
+  when: autobuild_debug_mode | default(false) | bool
 
 - name: Autobuild variable initialization
   ansible.builtin.include_tasks: autovars/autobuild-variable-init.yml
@@ -19,7 +20,7 @@
 - name: Ensure required packages are installed
   ansible.builtin.include_role:
     name: jcook3701.utils.general
-    task_from: package-manager-switch.yml
+    tasks_from: package-manager-switch.yml
   when: pkgs is defined
 
 - name: Fetch Latest Github Tag if git_repo.tags left undefined

@@ -1,0 +1,14 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+# The primary action switch.
+# Valid choices:
+#   'apt_clean', 'package_facts', 'reload_shell', 'sudo_user_facts', 'update_alternatives', 'all', or 'none'
+general_task_action: "none"
+
+# Individual feature toggle fallbacks (allows granular control)
+general_enable_apt_clean: false
+general_enable_package_facts: false
+general_enable_reload_shell: false
+general_enable_sudo_user_facts: false
+general_enable_update_alternatives: false

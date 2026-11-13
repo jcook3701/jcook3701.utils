@@ -1,0 +1,14 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: Forcefully remove targeted user profile and wipe home folder spaces
+  ansible.builtin.user:
+    name: "{{ user_name }}"
+    state: "absent"
+    remove: true
+
+- name: Purge associated passwordless sudoers authorization snippet file
+  ansible.builtin.file:
+    path: "{{ user_file.sudoers }}"
+    state: absent
+  become: true

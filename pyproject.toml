@@ -111,6 +111,7 @@ include = [
   "lookup*",
   "module_utils*",
   "modules*",
+  "test*",
 ]
 # ====================================
 # Black Configuration: (Formatting)

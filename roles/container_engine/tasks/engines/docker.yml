@@ -1,0 +1,25 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: Check for an active compose deployment
+  ansible.builtin.stat:
+    path: "{{ container_engine_file.compose }}"
+  register: compose_file_status
+
+- name: Terminate service execution stack (Uninstall / Teardown)
+  community.docker.docker_compose_v2:
+    project_src: "{{ container_engine_directory.src }}"
+    state: "absent"
+    remove_images: "{{ 'all' if container_engine_desired_state == 'teardown' else omit }}"
+  when:
+    - container_engine_desired_state | default('present') in ['absent', 'teardown']
+    - compose_file_status.stat.exists
+
+- name: Initialize service execution stack (Install)
+  community.docker.docker_compose_v2:
+    project_src: "{{ container_engine_directory.src }}"
+    state: "present"
+    pull: "{{ 'always' if container_engine_pull_images | bool else omit }}"
+    recreate: "always"
+    timeout: 300
+  when: container_engine_desired_state | default('present') == 'present'

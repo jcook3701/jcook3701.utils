@@ -1,0 +1,105 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: Ensure Debian APT keyrings directory exists
+  ansible.builtin.file:
+    path: "{{ repo_add_directory.keyrings | default('/etc/apt/keyrings') }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+  become: true
+
+- name: Download raw GPG or ASC key to temporary path
+  ansible.builtin.get_url:
+    url: "{{ repo_add_debian_signed_by }}"
+    dest: "{{ repo_add_file.tmp_key }}"
+    owner: root
+    group: root
+    mode: "0644"
+  changed_when: false
+  become: true
+  when:
+    - repo_add_debian_signed_by is defined
+    - repo_add_debian_signed_by.startswith('http://')
+        or repo_add_debian_signed_by.startswith('https://')
+
+- name: Copy local repository signing key to temporary path
+  ansible.builtin.copy:
+    src: "{{ repo_add_debian_signed_by }}"
+    dest: "{{ repo_add_file.tmp_key }}"
+    remote_src: true
+    owner: root
+    group: root
+    mode: "0644"
+  become: true
+  when:
+    - repo_add_debian_signed_by | length > 0
+    - repo_add_debian_signed_by is not match('^https?://')
+
+- name: Normalize repository signing key to requested format
+  ansible.builtin.command:
+    cmd: >-
+      gpg --batch --yes
+      --no-options --no-default-keyring --no-keyring
+      {{ '--armor' if repo_add_debian_key_format == 'asc' else '' }}
+      --import-options import-export
+      --output {{ repo_add_file.tmp_key }}.normalized
+      --import {{ repo_add_file.tmp_key }}
+  become: true
+  changed_when: false
+  when: repo_add_debian_signed_by | length > 0
+
+- name: Install repository signing key
+  ansible.builtin.copy:
+    src: "{{ repo_add_file.tmp_key }}.normalized"
+    dest: "{{ repo_add_file.signing_key }}"
+    remote_src: true
+    owner: root
+    group: root
+    mode: "0644"
+  become: true
+  notify: Refresh debian cache
+  when: repo_add_debian_signed_by | length > 0
+
+- name: Clean up temporary signing key files
+  ansible.builtin.file:
+    path: "{{ tmp_key }}"
+    state: absent
+  become: true
+  loop:
+    - "{{ repo_add_file.tmp_key }}"
+    - "{{ repo_add_file.tmp_key }}.normalized"
+  loop_control:
+    loop_var: tmp_key
+    label: "Removing Temporary Key: {{ tmp_key }}"
+
+- name: Determine if target Debian/Ubuntu host uses legacy apt
+  ansible.builtin.set_fact:
+    repo_add_is_legacy_apt: "{{ true if (ansible_distribution == 'Ubuntu'
+                                          and ansible_distribution_major_version | int < 20)
+                                          or (ansible_distribution == 'Debian'
+                                          and ansible_distribution_major_version | int < 11)
+                                      else false }}"
+
+- name: Configure Debian Legacy One-Line Repository
+  ansible.builtin.template:
+    src: debian.sources.j2
+    dest: "{{ repo_add_directory.sources }}/{{ repo_add_id }}.list"
+    owner: root
+    group: root
+    mode: "0644"
+  become: true
+  notify: Refresh debian cache
+  when: repo_add_is_legacy_apt | bool
+
+- name: Execute modern DEB822 deployment workflow
+  ansible.builtin.template:
+    src: debian.sources.j2
+    dest: "{{ repo_add_file.deb822 }}"
+    owner: root
+    group: root
+    mode: "0644"
+  become: true
+  notify: Refresh debian cache
+  when: not repo_add_is_legacy_apt | bool

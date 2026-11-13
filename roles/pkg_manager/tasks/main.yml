@@ -1,0 +1,25 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: Print Packages to Install
+  ansible.builtin.debug:
+    msg: "{{ pkg_manager_pkgs }}"
+  when: pkg_manager_verbose | bool
+
+- name: Load OS-specific package manager variables
+  ansible.builtin.include_vars: "{{ pkg_manager_vars }}"
+  with_first_found:
+    - "{{ ansible_facts['os_family'] | lower }}.yml"
+    - "default.yml"
+  loop_control:
+    loop_var: pkg_manager_vars
+    label: "Including variables from: {{ pkg_manager_vars }}"
+
+- name: Execute OS-specific specific package manager tasks
+  ansible.builtin.include_tasks: "{{ pkg_manager_tasks }}"
+  with_first_found:
+    - "os/{{ ansible_facts['os_family'] | lower }}.yml"
+    - "os/default.yml"
+  loop_control:
+    loop_var: pkg_manager_tasks
+    label: "Running tasks from: {{ pkg_manager_tasks }}"

@@ -1,0 +1,43 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: Load OS-specific variables for Repository Adder
+  ansible.builtin.include_vars: "{{ repo_add_vars }}"
+  with_first_found:
+    - "{{ ansible_facts['os_family'] | lower }}.yml"
+  loop_control:
+    loop_var: repo_add_vars
+    label: "Loading variables file: {{ repo_add_vars }}"
+
+- name: Ensure repository pre-requisite packages are installed
+  ansible.builtin.package:
+    name: "{{ repo_add_pkg_names | default([]) }}"
+    state: present
+  become: true
+
+- name: Route to Repository Provisioning Workflow
+  ansible.builtin.include_tasks: "{{ repo_add_tasks }}"
+  with_first_found:
+    - "platform/{{ ansible_os_family | lower }}/present.yml"
+    - "platform/default/present.yml"
+  loop_control:
+    loop_var: repo_add_tasks
+    label: "Executing provisioning tasks for platform: {{ ansible_os_family }}"
+  when:
+    - ansible_os_family in ['Debian', 'RedHat', 'Archlinux']
+    - repo_add_state | default('present') == 'present'
+
+- name: Route to Repository Decommissioning Workflow
+  ansible.builtin.include_tasks: "{{ repo_add_tasks }}"
+  with_first_found:
+    - "platform/{{ ansible_os_family | lower }}/absent.yml"
+    - "platform/default/absent.yml"
+  loop_control:
+    loop_var: repo_add_tasks
+    label: "Executing decommissioning tasks for platform: {{ ansible_os_family }}"
+  when:
+    - ansible_os_family in ['Debian', 'RedHat', 'Archlinux']
+    - repo_add_state | default('present') == 'absent'
+
+- name: Force Ansible to Refresh package manager cache right now
+  ansible.builtin.meta: flush_handlers

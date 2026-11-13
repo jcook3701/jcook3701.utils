@@ -1,0 +1,12 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: Configure Red Hat Repository
+  ansible.builtin.template:
+    src: redhat.repo.j2
+    dest: "{{ repo_add_directory.sources }}/{{ repo_add_id }}.repo"
+    owner: root
+    group: root
+    mode: "0644"
+  become: true
+  notify: Refresh redhat cache

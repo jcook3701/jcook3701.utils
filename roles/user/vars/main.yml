@@ -1,0 +1,14 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+user_directory:
+  home: "{{ user_home_dir | default('/home/' + user_name) }}"
+  config: "{{ user_home_dir | default('/home/' + user_name) }}/.config"
+  local_bin: "{{ user_home_dir | default('/home/' + user_name) }}/.local/bin"
+  ssh: "{{ user_home_dir | default('/home/' + user_name) }}/.ssh"
+
+user_file:
+  bashrc: "{{ user_directory.home }}/.bashrc"
+  sudoers: "/etc/sudoers.d/{{ user_name }}"
+  authorized_keys: "{{ user_directory.ssh }}/authorized_keys"
+  private_key: "{{ user_directory.ssh }}/id_ed25519"
