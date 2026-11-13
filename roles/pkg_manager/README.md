@@ -8,7 +8,7 @@ A universal, cross-platform package manager role for Ansible. It simplifies inst
 * **Unified Advanced Removal**: Standardizes advanced package cleanups like purging config files and autoremoving orphaned dependencies across all platforms.
 * **Zero-Loop Batching**: Passes package lists directly to native package managers in a single action for massive performance gains.
 * **Isolated File Support**: Automatically splits and safely loops over local file installations (`.deb`, `.rpm`, `.pkg.tar.*`) using dedicated `package` loops to prevent parameter pollution.
-* **Argument Validation**: Enforces exact structural types and safe variable coersion at runtime using native `meta/argument_specs.yml`.
+* **Argument Validation**: Enforces exact structural types and safe variable coercion at runtime using native `meta/argument_specs.yml`.
 
 ## Role Variables
 
