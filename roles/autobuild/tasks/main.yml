@@ -9,9 +9,10 @@
     tasks_from: sudo_user_facts.yml
   when: sudo_user is not defined
 
-- name: debug
+- name: Debug Autobuild Variables
   ansible.builtin.debug:
     msg: "git_repo: {{ git_repo }}"
+  when: autobuild_debug_mode | default(false) | bool
 
 - name: Autobuild variable initialization
   ansible.builtin.include_tasks: autovars/autobuild-variable-init.yml

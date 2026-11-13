@@ -4,7 +4,8 @@
 argument_specs:
   main:
     short_description: "Centralized user identity lifecycle provisioning specification blueprint."
-    description: "Enforces strict typechecking and compliance controls for provisioning human administrator accounts, generating modern keys, and bootstrapping access handles."
+    description: "Enforces strict typechecking and compliance controls for provisioning human
+      administrator accounts, generating modern keys, and bootstrapping access handles."
     author: "Jared Cook"
     options:
       user_state:
@@ -21,7 +22,8 @@ argument_specs:
       user_password:
         type: str
         default: ""
-        description: "The cleartext user account password string to be securely hashed using SHA-512 during execution passes."
+        description: "The cleartext user account password string to be securely hashed using
+          SHA-512 during execution passes."
 
       user_uid:
         type: int
@@ -33,7 +35,8 @@ argument_specs:
 
       user_home:
         type: str
-        description: "The absolute custom filesystem path mapping for the user home folder space. Defaults to /home/username."
+        description: "The absolute custom filesystem path mapping for the user home folder space.
+          Defaults to /home/username."
 
       user_shell:
         type: str
@@ -49,14 +52,17 @@ argument_specs:
       user_enable_ssh:
         type: bool
         default: true
-        description: "Toggles the entire secure shell configuration layer, including directory security and keypair generation."
+        description: "Toggles the entire secure shell configuration layer, including directory security
+          and keypair generation."
 
       user_enable_bash:
         type: bool
         default: false
-        description: "Toggles the deployment of tailored user profile initializations and terminal customization scripts."
+        description: "Toggles the deployment of tailored user profile initializations and terminal
+          customization scripts."
 
       user_public_key_path:
         type: str
         default: "~/.ssh/id_ed25519.pub"
-        description: "The local controller file path tracking the active public key to copy to the target host for passwordless authentication."
+        description: "The local controller file path tracking the active public key to copy to the
+          target host for passwordless authentication."
