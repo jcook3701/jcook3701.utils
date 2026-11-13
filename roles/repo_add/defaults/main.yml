@@ -16,6 +16,9 @@ repo_add_state: "present"
 # Debian Scoped Overrides (Passed dynamically by orchestrator)
 # -------------------------------------------------------------------------
 repo_add_debian_types: "deb"
+
+# Installed signing key format ('asc' or 'gpg')
+repo_add_debian_key_format: "asc"
 repo_add_debian_uris: ""
 repo_add_debian_suites: ""
 repo_add_debian_components: ""

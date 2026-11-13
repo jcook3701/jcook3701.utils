@@ -11,7 +11,8 @@ argument_specs:
       repo_add_id:
         type: str
         required: true
-        description: "The unique shorthand identifier used for the repository filename and INI configuration block headers."
+        description: "The unique shorthand identifier used for the repository filename
+          and INI configuration block headers."
 
       repo_add_name:
         type: str
@@ -21,19 +22,33 @@ argument_specs:
       repo_add_enabled:
         type: bool
         default: true
-        description: "Determines whether the repository index is actively checked by the system package manager."
+        description: "Determines whether the repository index is actively checked by the
+          system package manager."
 
       repo_add_state:
         type: "str"
         default: "present"
         choices: ["present", "absent"]
-        description: "The targeted lifecycle execution state. Setting this property to 'absent' will trigger clean, systemic deletion of the repository configurations."
+        description: "The targeted lifecycle execution state. Setting this property to 'absent' will
+          trigger clean, systemic deletion of the repository configurations."
 
       repo_add_debian_types:
         type: "str"
         default: "deb"
         required: false
         description: "The types of packages to fetch for Debian/Ubuntu systems (e.g., deb, deb-src)."
+
+      repo_add_debian_key_format:
+        type: str
+        required: false
+        default: "asc"
+        choices:
+          - asc
+          - gpg
+        description:
+          - Defines the installed Debian APT repository signing key format.
+          - Use asc for ASCII-armored keys or gpg for binary keyrings.
+          - Automatically converts the downloaded key when necessary.
 
       # Debian Scoped Overrides (Passed dynamically by orchestrator)
       repo_add_debian_uris:
@@ -65,12 +80,14 @@ argument_specs:
       repo_add_redhat_gpgkey:
         type: "str"
         required: false
-        description: "An HTTPS web URL or local file path pointing to the repository's cryptographic GPG verification key."
+        description: "An HTTPS web URL or local file path pointing to the repository's
+          cryptographic GPG verification key."
 
       repo_add_arch_sig_level:
         type: "str"
         required: false
-        description: "Cryptographic signature trust and verification requirements for this specific Arch Linux pacman repository block."
+        description: "Cryptographic signature trust and verification requirements for this specific
+          Arch Linux pacman repository block."
 
       # Arch Linux Scoped Overrides
       repo_add_arch_server:

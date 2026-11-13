@@ -27,7 +27,13 @@
 
 - name: Purge Associated Cryptographic GPG Validation Keyring
   ansible.builtin.file:
-    path: "{{ repo_add_directory.keyrings }}/{{ repo_add_id }}.asc"
+    path: "{{ repo_add_directory.keyrings }}/{{ repo_add_id }}.{{ repo_add_key_format }}"
     state: absent
   become: true
   notify: "Refresh debian cache"
+  loop:
+    - asc
+    - gpg
+  loop_control:
+    loop_var: repo_add_key_format
+    label: "Removing Signing Key: {{ repo_add_id }}.{{ repo_add_key_format }}"

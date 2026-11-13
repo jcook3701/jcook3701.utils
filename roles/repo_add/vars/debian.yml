@@ -29,4 +29,6 @@ repo_add_directory:
 repo_add_file:
   tmp_key: "/tmp/{{ repo_add_id }}.tmpkey"
   asc: "{{ repo_add_directory.keyrings }}/{{ repo_add_id }}.asc"
+  gpg: "{{ repo_add_directory.keyrings }}/{{ repo_add_id }}.gpg"
+  signing_key: "{{ repo_add_directory.keyrings }}/{{ repo_add_id }}.{{ repo_add_debian_key_format }}"
   deb822: "{{ repo_add_directory.sources }}/{{ repo_add_id }}.sources"

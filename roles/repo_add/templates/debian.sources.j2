@@ -38,13 +38,13 @@ Components: {{ repo_add_debian_components }}
 {% if repo_add_debian_arch %}
 Architectures: {{ repo_add_debian_arch }}
 {% endif %}
-Signed-By: {{ repo_add_file.asc }}
+Signed-By: {{ repo_add_file.signing_key }}
 Enabled: {{ 'yes' if repo_add_enabled else 'no' }}
 {%- endmacro -%}
 
 {%- macro legacy() -%}
 {# Render legacy repository configuration line #}
-deb {% if repo_add_debian_arch %}[arch={{ repo_add_debian_arch }} signed-by={{ repo_add_file.asc }}]{% else %}[signed-by={{ repo_add_file.asc }}]{% endif %} {{ repo_add_debian_uris }} {{ repo_add_debian_suites }} {{ repo_add_debian_components }}
+deb {% if repo_add_debian_arch %}[arch={{ repo_add_debian_arch }} signed-by={{ repo_add_file.signing_key }}]{% else %}[signed-by={{ repo_add_file.signing_key }}]{% endif %} {{ repo_add_debian_uris }} {{ repo_add_debian_suites }} {{ repo_add_debian_components }}
 {%- endmacro -%}
 
 {%- macro debian_repo() -%}

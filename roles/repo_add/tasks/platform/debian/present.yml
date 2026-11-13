@@ -17,17 +17,6 @@
     owner: root
     group: root
     mode: "0644"
-    force: true
-  become: true
-  when:
-    - repo_add_debian_signed_by is defined
-    - repo_add_debian_signed_by.startswith('http://')
-        or repo_add_debian_signed_by.startswith('https://')
-
-- name: Check if the downloaded key is ASCII armored
-  ansible.builtin.command:
-    cmd: "file {{ repo_add_file.tmp_key }}"
-  register: key_check
   changed_when: false
   become: true
   when:
@@ -35,35 +24,55 @@
     - repo_add_debian_signed_by.startswith('http://')
         or repo_add_debian_signed_by.startswith('https://')
 
-- name: Convert binary GPG key to ASCII armored format
-  ansible.builtin.command:
-    cmd: >
-      gpg --no-default-keyring
-      --keyring {{ repo_add_file.tmp_key }}
-      --export
-      --armor
-      -o {{ repo_add_file.asc }}
-  become: true
-  when:
-    - ('pgp public key block' not in key_check.stdout | lower)
-
-- name: Copy already armored ASC key into place directly
+- name: Copy local repository signing key to temporary path
   ansible.builtin.copy:
-    src: "{{ repo_add_file.tmp_key }}"
-    dest: "{{ repo_add_file.asc }}"
+    src: "{{ repo_add_debian_signed_by }}"
+    dest: "{{ repo_add_file.tmp_key }}"
     remote_src: true
     owner: root
     group: root
     mode: "0644"
   become: true
   when:
-    - ('pgp public key block' in key_check.stdout | lower)
+    - repo_add_debian_signed_by | length > 0
+    - repo_add_debian_signed_by is not match('^https?://')
 
-- name: Clean up temporary key file
+- name: Normalize repository signing key to requested format
+  ansible.builtin.command:
+    cmd: >-
+      gpg --batch --yes
+      --no-options --no-default-keyring --no-keyring
+      {{ '--armor' if repo_add_debian_key_format == 'asc' else '' }}
+      --import-options import-export
+      --output {{ repo_add_file.tmp_key }}.normalized
+      --import {{ repo_add_file.tmp_key }}
+  become: true
+  changed_when: false
+  when: repo_add_debian_signed_by | length > 0
+
+- name: Install repository signing key
+  ansible.builtin.copy:
+    src: "{{ repo_add_file.tmp_key }}.normalized"
+    dest: "{{ repo_add_file.signing_key }}"
+    remote_src: true
+    owner: root
+    group: root
+    mode: "0644"
+  become: true
+  notify: Refresh debian cache
+  when: repo_add_debian_signed_by | length > 0
+
+- name: Clean up temporary signing key files
   ansible.builtin.file:
-    path: "{{ repo_add_file.tmp_key }}"
+    path: "{{ tmp_key }}"
     state: absent
   become: true
+  loop:
+    - "{{ repo_add_file.tmp_key }}"
+    - "{{ repo_add_file.tmp_key }}.normalized"
+  loop_control:
+    loop_var: tmp_key
+    label: "Removing Temporary Key: {{ tmp_key }}"
 
 - name: Determine if target Debian/Ubuntu host uses legacy apt
   ansible.builtin.set_fact:

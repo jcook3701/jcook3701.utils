@@ -4,21 +4,22 @@
 
 ## Role Variables
 
-| Variable | Description | Default |
-| :--- | :--- | :--- |
-| **`repo_add_id`** | The unique shorthand identifier used for the repository filename and INI configuration block headers. | *Required* |
-| **`repo_add_name`** | The descriptive, human-readable name assigned to the repository. | *Required* |
-| **`repo_add_enabled`** | Determines whether the repository index is actively checked by the system package manager. | `true` |
-| **`repo_add_state`** | The targeted lifecycle execution state. Set to `absent` to cleanly purge the repository files from the OS. | `"present"` |
-| **`repo_add_debian_types`** | The types of packages to fetch for Debian/Ubuntu systems (e.g., `deb`, `deb-src`). | `"deb"` |
-| **`repo_add_debian_uris`** | The base distribution package download URL for Debian/Ubuntu systems. | `""` |
-| **`repo_add_debian_suites`** | The specific distribution release codename (e.g., bookworm, jammy). | `""` |
-| **`repo_add_debian_components`** | The repository sections to track (e.g., main, stable, contrib). | `""` |
-| **`repo_add_debian_signed_by`** | An HTTPS web URL or local file path pointing to the cryptographic validation GPG key. | `""` |
-| **`repo_add_redhat_baseurl`** | The upstream mirror URL pointing to the standard RPM package directory tree. | `""` |
-| **`repo_add_redhat_gpgkey`** | An HTTPS web URL or local file path pointing to the repository's cryptographic GPG verification key. | `""` |
-| **`repo_add_arch_sig_level`** | Cryptographic signature trust and verification requirements for this specific Arch Linux pacman repository block. | `""` |
-| **`repo_add_arch_server`** | The remote server path hosting package databases for pacman configuration files. | `""` |
+| Variable | Type | Description / Choices | Default |
+| :--- | :--- | :--- | :--- |
+| **`repo_add_id`** | string | Unique shorthand identifier used for the repository filename and configuration block headers. | **Required** |
+| **`repo_add_name`** | string | Descriptive, human-readable name assigned to the repository. | **Required** |
+| **`repo_add_enabled`** | boolean | Determines whether the repository index is actively checked by the system package manager. | `true` |
+| **`repo_add_state`** | string | Repository lifecycle state. Choices: `present`, `absent`. | `present` |
+| **`repo_add_debian_types`** | string | Package types for Debian/Ubuntu repositories (e.g., `deb`, `deb-src`). | `deb` |
+| **`repo_add_debian_uris`** | string | Base distribution package download URL for Debian/Ubuntu systems. | `""` |
+| **`repo_add_debian_suites`** | string | Distribution release codename (e.g., `bookworm`, `jammy`) or `/` for a flat repository. | `""` |
+| **`repo_add_debian_components`** | string | Repository sections to track (e.g., `main`, `contrib`, `stable`). | `""` |
+| **`repo_add_debian_signed_by`** | string | HTTPS URL or local file path pointing to the repository's cryptographic signing key. | `""` |
+| **`repo_add_debian_key_format`** | string | Debian APT signing key output format. Choices: `asc` (ASCII-armored), `gpg` (binary keyring). Converts downloaded keys when necessary. | `asc` |
+| **`repo_add_redhat_baseurl`** | string | Upstream mirror URL pointing to the standard RPM package directory tree. | `""` |
+| **`repo_add_redhat_gpgkey`** | string | HTTPS URL or local file path pointing to the repository's cryptographic GPG verification key. | `""` |
+| **`repo_add_arch_sig_level`** | string | Cryptographic signature trust and verification requirements for the Arch Linux pacman repository. | `""` |
+| **`repo_add_arch_server`** | string | Remote server URL hosting package databases for Arch Linux pacman configuration. | `""` |
 
 ## Supported Topologies
 
