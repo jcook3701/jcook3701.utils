@@ -1,0 +1,25 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: Manage repository packages via dnf
+  ansible.builtin.dnf:
+    name: "{{ pkg_manager_pkgs | reject('match', pkg_manager_file_regex) | list }}"
+    state: "{{ pkg_manager_state }}"
+    update_cache: "{{ pkg_manager_update_cache }}"
+    autoremove: "{{ pkg_manager_autoremove }}"
+  become: true
+  when: (pkg_manager_pkgs | reject('match', pkg_manager_file_regex) | list | length) > 0
+
+- name: Install local .rpm packages via dnf
+  ansible.builtin.dnf:
+    name: "{{ package }}"
+    state: "{{ pkg_manager_state }}"
+    disable_gpg_check: true
+  loop: "{{ pkg_manager_pkgs | select('match', pkg_manager_file_regex) | list }}"
+  loop_control:
+    loop_var: "package"
+    label: "{{ package }}"
+  become: true
+  when:
+    - pkg_manager_state in ['present', 'latest']
+    - (pkg_manager_pkgs | select('match', pkg_manager_file_regex) | list | length) > 0

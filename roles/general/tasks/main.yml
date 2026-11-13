@@ -1,0 +1,37 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: Execute APT Clean and Update task
+  ansible.builtin.include_tasks: apt-clean-and-update.yml
+  when: >-
+    general_task_action == 'apt_clean' or
+    general_task_action == 'all' or
+    general_enable_apt_clean | bool
+
+- name: Execute Package Facts collection task
+  ansible.builtin.include_tasks: package-facts.yml
+  when: >-
+    general_task_action == 'package_facts' or
+    general_task_action == 'all' or
+    general_enable_package_facts | bool
+
+- name: Execute Reload Shell task
+  ansible.builtin.include_tasks: reload-shell.yml
+  when: >-
+    general_task_action == 'reload_shell' or
+    general_task_action == 'all' or
+    general_enable_reload_shell | bool
+
+- name: Execute Sudo User Facts task
+  ansible.builtin.include_tasks: sudo_user_facts.yml
+  when: >-
+    general_task_action == 'sudo_user_facts' or
+    general_task_action == 'all' or
+    general_enable_sudo_user_facts | bool
+
+- name: Execute Update Alternatives task
+  ansible.builtin.include_tasks: update-alternatives.yml
+  when: >-
+    general_task_action == 'update_alternatives' or
+    general_task_action == 'all' or
+    general_enable_update_alternatives | bool

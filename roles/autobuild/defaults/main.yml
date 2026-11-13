@@ -1,0 +1,14 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+# Primary operation switch.
+# Valid options: 'none', 'all', 'source_build_init', or 'custom_build'
+autobuild_task_action: "none"
+
+# Base parameters with generic default examples
+autobuild_name: "example-app"
+autobuild_git_repo: "https://github.com"
+autobuild_command: "make build"
+
+# Individual granular script switches to safely allow stacking tasks
+autobuild_enable_source_build_init: false

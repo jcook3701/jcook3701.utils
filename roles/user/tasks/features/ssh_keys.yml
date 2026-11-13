@@ -1,0 +1,27 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: Ensure targeted user hidden .ssh folder configuration namespace exists safely
+  ansible.builtin.file:
+    path: "{{ user_home | default('/home/' + user_name) }}/.ssh"
+    state: directory
+    mode: "0700"
+    owner: "{{ user_name }}"
+    group: "{{ user_name }}"
+
+- name: Deploy central controller public authorization key to target account space
+  ansible.posix.authorized_key:
+    user: "{{ user_name }}"
+    state: present
+    # FIX: Uses a safe fallback lookup string to prevent crashes if a custom path isn't defined
+    key: "{{ lookup('ansible.builtin.file', user_public_key_path | default('~/.ssh/id_ed25519.pub')) }}"
+  failed_when: false
+
+- name: Generate modern high-performance cryptographic outbound user keypair natively
+  community.crypto.openssh_keypair:
+    type: ed25519
+    path: "{{ user_home | default('/home/' + user_name) }}/.ssh/id_ed25519"
+    owner: "{{ user_name }}"
+    group: "{{ user_name }}"
+    mode: "0600"
+    state: present

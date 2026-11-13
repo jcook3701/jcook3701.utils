@@ -1,0 +1,25 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: --- USER ACCOUNT PROVISIONING INITIALIZATION ---
+  when: user_state == 'present'
+  block:
+    - name: Execute baseline user account and privilege registration
+      ansible.builtin.include_tasks: create.yml
+
+    - name: Build local baseline environment configuration skeletons
+      ansible.builtin.include_tasks: features/environment.yml
+
+    - name: Provision inbound and outbound secure user environment keys
+      ansible.builtin.include_tasks: features/ssh_keys.yml
+      when: user_enable_ssh | bool
+
+    - name: Build local bash configuration
+      ansible.builtin.include_tasks: features/bash.yml
+      when: user_enable_bash | bool
+
+- name: --- USER ACCOUNT RETIREMENT PURGE ---
+  when: user_state == 'absent'
+  block:
+    - name: Hand over execution flow to the profile removal routine
+      ansible.builtin.include_tasks: remove.yml

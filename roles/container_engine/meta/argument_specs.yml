@@ -1,0 +1,38 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+argument_specs:
+  main:
+    short_description: "Decoupled container composition runtime management framework engine."
+    description: "An isolated abstract wrapper role handling environment configuration validation,
+      target state synchronization, tracking mechanics, and context execution targets for running
+      Docker or Podman Compose stacks natively."
+    author: "Jared W. Cook"
+    options:
+      container_engine_project_src:
+        type: str
+        default: "/opt/container-stack"
+        description: "The absolute host filesystem directory path containing the targeted composition
+          infrastructure deployment file setup configuration layer."
+      container_engine_platform_type:
+        type: str
+        default: "docker"
+        choices: ["docker", "podman"]
+        description: "The targeted underlying context engine preference tool metric selecting active
+          processing daemon runtime environment layers downstream."
+      container_engine_desired_state:
+        type: str
+        default: "present"
+        choices: ["present", "absent", "teardown"]
+        description: "Deployment lifecycle baseline profile enforcement parameter managing creation
+          hooks, container stack removal, or complete data purge actions."
+      container_engine_trigger_condition:
+        type: bool
+        default: true
+        description: "Metric gate tracking validation conditional criteria evaluated explicitly before
+          triggering engine execution modifications on systems."
+      container_engine_pull_images:
+        type: bool
+        default: true
+        description: "Control tracking boolean flag forcing layer registry synchronization lookup sweeps
+          to pull images down to local nodes during initialization cycles."

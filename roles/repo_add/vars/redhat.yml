@@ -1,0 +1,15 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+repo_add_redhat_baseurl: "https://example.com"
+repo_add_redhat_gpgcheck: true
+repo_add_redhat_repo_gpgcheck: true
+repo_add_redhat_gpgkey: "https://example.com"
+
+repo_add_os_pkg_names:
+  - ca-certificates
+  - curl
+  - gnupg2
+
+repo_add_directory:
+  sources: "/etc/yum.repos.d"

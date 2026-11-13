@@ -1,0 +1,41 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+galaxy_info:
+  author: Jared Cook
+  description: >-
+    A generic utility role to safely add cross-platform repositories.
+  company: "Cook's Code, Inc."
+  license: "AGPL-3.0-or-later"
+  min_ansible_version: ">=2.10"
+  role_name: container_engine
+
+  platforms:
+    - name: EL
+      versions:
+        - "8"
+        - "9"
+    - name: Debian
+      versions:
+        - all
+    - name: Ubuntu
+      versions:
+        - all
+    - name: ArchLinux
+      versions:
+        - all
+
+  galaxy_tags:
+    - centos
+    - debian
+    - archlinux
+    - desktop
+    - server
+    - apps
+
+dependencies: []
+
+collections:
+  - community.general
+  - community.docker
+  - containers.podman

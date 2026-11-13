@@ -1,0 +1,10 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: Deploy tailored user shell initialization profiles
+  ansible.builtin.template:
+    src: "bashrc.j2"
+    dest: "{{ user_file.bashrc }}"
+    owner: "{{ user_name }}"
+    group: "{{ user_name }}"
+    mode: "0644"

@@ -1,0 +1,25 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: Ensure target POSIX user account is present on system
+  ansible.builtin.user:
+    name: "{{ user_name }}"
+    uid: "{{ user_uid if user_uid | string | length > 0 else omit }}"
+    group: "{{ user_gid if user_gid | string | length > 0 else omit }}"
+    groups: "{{ user_groups }}"
+    append: true
+    shell: "{{ user_shell }}"
+    home: "{{ user_home | default('/home/' + user_name) }}"
+    password: "{{ user_password | password_hash('sha512') if user_password | string | length > 0 else omit }}"
+    state: "present"
+  register: system_user_created
+
+- name: Enforce passwordless privilege escalation for management user
+  ansible.builtin.copy:
+    content: "{{ user_name }} ALL=(ALL) NOPASSWD:ALL"
+    dest: "{{ user_file.sudoers }}"
+    owner: root
+    group: root
+    mode: "0440"
+    validate: "visudo -cf %s"
+  become: true

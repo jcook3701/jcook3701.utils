@@ -1,0 +1,18 @@
+# SPDX-FileCopyrightText: Copyright © 2026, Jared Cook
+# SPDX-License-Identifier: AGPL-3.0-or-later
+---
+- name: Initialize user profile baseline local config workspace directory
+  ansible.builtin.file:
+    path: "{{ user_directory.config }}"
+    state: directory
+    mode: "0755"
+    owner: "{{ user_name }}"
+    group: "{{ user_name }}"
+
+- name: Initialize user profile baseline local binary workspace directory
+  ansible.builtin.file:
+    path: "{{ user_directory.local_bin }}"
+    state: directory
+    mode: "0755"
+    owner: "{{ user_name }}"
+    group: "{{ user_name }}"
